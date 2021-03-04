@@ -1,0 +1,19 @@
+<%- include ('../partials/head') -%>
+    <%- include ('../partials/sidebar') -%>
+        <%- include ('../partials/topbar') -%>
+            <ul>
+                <div class="row">
+                    <a href="/courses/<%= course.id %>/edit">Editar</a>
+                    <form action="/courses/<%= course.id %>?_method=DELETE" method="post">
+                        <button>Delete</button>
+                    </form>
+                </div>
+                <li>
+                    <%= course.name %> - <%= course.description %> - <%= course.id %>
+                </li>
+
+
+
+            </ul>
+            <%- include ('../partials/footer') -%>
+                <%- include ('../partials/scripts') -%>

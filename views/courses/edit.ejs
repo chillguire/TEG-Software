@@ -1,0 +1,40 @@
+<%- include ('../partials/head') -%>
+    <%- include ('../partials/sidebar') -%>
+        <%- include ('../partials/topbar') -%>
+
+            <div class="container">
+                <div class="row justify-content-lg-center">
+                    <div class="col col-lg-8">
+
+                        <form class="user needs-validation" action="/courses/<%= course._id %>?_method=PUT"
+                            method="post" novalidate>
+                            <div class="form-group">
+                                <label for="validationCustom01">Nombre</label>
+                                <input type="text" class="form-control form-control-user" id="validationCustom01"
+                                    placeholder="Name" name="name" value="<%= course.name %>" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Name not valid
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom02">Descripción</label>
+                                <textarea class="form-control form-control-user" id="validationCustom02"
+                                    placeholder="Description" name="description"
+                                    required><%= course.description %></textarea>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Name not valid
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-user">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <%- include ('../partials/footer') -%>
+                <%- include ('../partials/scripts') -%>

@@ -1,0 +1,31 @@
+<%- include ('../partials/head') -%>
+    <%- include ('../partials/sidebar') -%>
+        <%- include ('../partials/topbar') -%>
+
+            <div class="row mx-2 mb-4">
+                <a href="/courses/new" class="btn btn-outline-primary">Añadir</a>
+            </div>
+
+            <div class="row">
+
+                <% for (let i=0; i < courses.length; i++) { %>
+                    <div class="col col-lg-4">
+                        <div class="card shadow mx-2 mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    <%= courses[i].name %>
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <%= courses[i].description %>
+                                </p>
+                                <a href="/courses/<%= courses[i].id %>" class="btn btn-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+
+            </div>
+            <%- include ('../partials/footer') -%>
+                <%- include ('../partials/scripts') -%>
