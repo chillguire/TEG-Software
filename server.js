@@ -1,42 +1,28 @@
 const express = require('express');
 const path = require('path');
+
 const mongoose = require('mongoose');
-const { courseSchema } = require('./schemas');
-const catchAsync = require('./utils/catchAsync');
+const User = require('./models/user');
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+
+const session = require('express-session');
+const flash = require('connect-flash');
+
+const { isLoggedIn } = require('./middleware/auth');
+
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
-const Course = require('./models/course');
 
-//** MIDDLEWARE
-
-function validateCourse(req, res, next) {
-
-    const course = {
-        name: req.body.name,
-        description: req.body.description,
-    }
-
-    const { error } = courseSchema.validate(course);
-
-    if (error) {
-        // const msg = error.details.map(el => el.message).join(',');
-        const errors = [];
-        for (let i = 0; i < error.details.length; i++) {
-            errors[i] = error.details[i].message;
-            throw new ExpressError(errors, 400);
-        }
-    } else {
-        next();
-    }
-}
 
 //** DB
 mongoose.connect('mongodb://localhost/LMS', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
 });
-
-mongoose.set('useFindAndModify', false);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -54,67 +40,55 @@ app.use(methodOverride('_method'));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+
+const sessionConfig = {
+    secret: 'Chavez no puede ver esto porqué está MUERTO',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // ms/s * s/m * m/h * h/d * d/w
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+    }
+}
+app.use(session(sessionConfig));
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    res.locals.success = req.flash('success');
+    res.locals.warning = req.flash('warning');
+    res.locals.error = req.flash('error');
+    next();
+});
 
 //** ROUTES
 app.get('/', (req, res) => {
-    res.render('home')
+    res.redirect('/courses');
 });
 
-app.get('/courses', catchAsync(async (req, res) => {
-    const courses = await Course.find({})
-    res.render('courses/index', { courses });
-}));
+const courseRoutes = require('./routes/courses');
+app.use('/courses', courseRoutes);
 
-app.get('/courses/new', (req, res) => {
-    res.render('courses/new');
-});
+// const lessons = require('./routes/lessons');
+// app.use('/courses/:id/lessons', lessons);
 
-app.post('/courses', validateCourse, catchAsync(async (req, res, next) => {
+const userRoutes = require('./routes/users');
+app.use(userRoutes);
 
-    const newCourse = {
-        name: req.body.name,
-        description: req.body.description,
-    }
-
-    const course = new Course(newCourse);
-    await course.save();
-
-    res.redirect(`/courses/${course._id}`);
-}));
-
-app.get('/courses/:id', catchAsync(async (req, res) => {
-    const course = await Course.findById(req.params.id)
-    res.render('courses/show', { course });
-}));
-
-app.get('/courses/:id/edit', catchAsync(async (req, res) => {
-    const course = await Course.findById(req.params.id)
-    res.render('courses/edit', { course });
-}));
-
-app.put('/courses/:id', validateCourse, catchAsync(async (req, res) => {
-    const editedCourse = {
-        name: req.body.name,
-        description: req.body.description,
-    }
-
-    const course = await Course.findByIdAndUpdate(req.params.id, { ...editedCourse })
-
-    res.redirect(`/courses/${course._id}`);
-}));
-
-app.delete('/courses/:id', catchAsync(async (req, res) => {
-    await Course.findByIdAndDelete(req.params.id)
-    res.redirect(`/courses`);
-}));
-
-app.all('*', (req, res, next) => {
-    next(new ExpressError('Page not found', 404));
+app.all('*', isLoggedIn, (req, res, next) => {
+    res.sendStatus(404);
 });
 
 //** ERROR HANDLING
-
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) {

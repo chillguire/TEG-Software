@@ -1,6 +1,7 @@
 html {
     position: relative;
     min-height: 100%;
+    overflow-x: hidden;
 }
 body {
     height: 100%;
@@ -15,6 +16,7 @@ body {
     background-size: cover;
     width: 100%;
     overflow-x: hidden;
+    z-index: 1;
 }
 #wrapper #content-wrapper #content {
     flex: 1 0 auto;
@@ -52,14 +54,7 @@ body {
 .topbar .nav-item .nav-link {
     position: relative;
 }
-.sidebar .nav-item .nav-link .badge-counter,
-.topbar .nav-item .nav-link .badge-counter {
-    position: absolute;
-    transform: scale(0.7);
-    transform-origin: top right;
-    right: 0.25rem;
-    margin-top: -0.25rem;
-}
+
 .sidebar .nav-item .nav-link .img-profile,
 .topbar .nav-item .nav-link .img-profile {
     height: 2rem;
@@ -172,6 +167,7 @@ body {
 .sidebar {
     width: 6.5rem;
     min-height: 100vh;
+    transition: all 0.25s;
 }
 .sidebar .nav-item {
     position: relative;
@@ -183,6 +179,7 @@ body {
     text-align: center;
     padding: 0.75rem 1rem;
     width: 6.5rem;
+    z-index: 0;
 }
 .sidebar .nav-item .nav-link span {
     font-size: 0.65rem;
@@ -194,8 +191,8 @@ body {
 .sidebar .nav-item .collapse {
     position: absolute;
     left: calc(6.5rem + 1.5rem / 2);
-    z-index: 1;
     top: 2px;
+    z-index: 2;
 }
 .sidebar .nav-item .collapse .collapse-inner {
     border-radius: 0.35rem;
@@ -245,10 +242,9 @@ body {
 .sidebar.toggled {
     width: 0 !important;
     overflow: hidden;
+    transition: all 0.25s;
 }
-/* .sidebar.toggled .sidebar-card {
-    display: none;
-} */
+
 .sidebar .sidebar-brand {
     height: 4.375rem;
     text-decoration: none;
@@ -258,7 +254,6 @@ body {
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.05rem;
-    z-index: 1;
 }
 .sidebar .sidebar-brand .sidebar-brand-icon i {
     font-size: 2rem;
@@ -411,11 +406,12 @@ textarea {
 footer{
     position: absolute;
     bottom: 0;
+    right:0;
     width: calc(100% - 6.5rem);
+    transition: all 0.25s;
 }
 footer.sticky-footer {
     padding: 2rem 0;
-    flex-shrink: 0;
 }
 footer.sticky-footer .copyright {
     line-height: 1;
@@ -423,4 +419,27 @@ footer.sticky-footer .copyright {
 }
 body.sidebar-toggled footer.sticky-footer {
     width: 100%;
+}
+.modal-content{
+    background-color: #343a40 !important;
+}
+.modal-header{
+    border-bottom: 1px solid rgba(0,0,0,.125) !important;
+}
+
+.modal-footer{
+    border-top: 1px solid rgba(0,0,0,.125) !important;
+}
+
+.dismissable{
+    text-shadow: none !important;
+    color: #fff !important;
+}
+
+html>.modal-open {
+    overflow-y: hidden;
+    position: fixed;
+}
+.fade{
+    transition: all 0.25s !important;
 }

@@ -1,17 +1,13 @@
 <%- include ('partials/head') -%>
-    <%- include ('partials/sidebar') -%>
-        <%- include ('partials/topbar') -%>
-
-            <div class="row">
-                <div class="col-6 offset-3">
-                    <div class="alert alert-danger" role="alert">
-                        <h4 class="alert-heading">
-                            <%= err.message %>
-                        </h4>
-                        <p>
-                            <%= err.stack %>
-                        </p>
-                    </div>
-                </div>
-                <%- include ('partials/footer') -%>
-                    <%- include ('partials/scripts') -%>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">
+                    <%= err.message %>
+                </h4>
+                <p>
+                    <%= err.stack %>
+                </p>
+            </div>
+        </div>
+        <%- include ('partials/scripts') -%>
