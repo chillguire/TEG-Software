@@ -10,6 +10,15 @@ const courseSchema = new Schema({
         type: String,
         required: true,
     },
+    roomID: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    // instructor: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'User',
+    // }
 });
 
 module.exports = mongoose.model('Course', courseSchema)

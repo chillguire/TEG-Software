@@ -1,4 +1,6 @@
 const express = require('express');
+const app = express();
+const http = require('http').Server(app);
 const path = require('path');
 
 const mongoose = require('mongoose');
@@ -9,6 +11,12 @@ const LocalStrategy = require('passport-local');
 
 const session = require('express-session');
 const flash = require('connect-flash');
+
+const io = require('socket.io')(http);
+const { ExpressPeerServer } = require('peer');
+const peerServer = ExpressPeerServer(http, {
+    debug: true
+});
 
 const { isLoggedIn } = require('./middleware/auth');
 
@@ -31,8 +39,6 @@ db.once('open', function () {
 });
 
 //** APP CONFIG
-const app = express();
-
 app.use(express.urlencoded({ extended: true, }));
 // app.use(express.json());
 
@@ -70,13 +76,18 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/peerjs', peerServer);
+
 //** ROUTES
 app.get('/', (req, res) => {
-    res.redirect('/courses');
+    res.redirect('/login');
 });
 
 const courseRoutes = require('./routes/courses');
 app.use('/courses', courseRoutes);
+
+const roomRoutes = require('./routes/rooms');
+app.use('/courses', roomRoutes);
 
 // const lessons = require('./routes/lessons');
 // app.use('/courses/:id/lessons', lessons);
@@ -86,6 +97,27 @@ app.use(userRoutes);
 
 app.all('*', isLoggedIn, (req, res, next) => {
     res.sendStatus(404);
+});
+
+//** WEBSOCKETS
+io.on('connection', (socket) => {
+    console.log('user connected uwu');
+
+    socket.on('join-room', (roomID, userID) => {
+
+        socket.join(roomID);
+
+        socket.to(roomID).broadcast.emit('user-connected', userID);
+
+        socket.on('message', (message) => {
+
+            io.to(roomID).emit('create-message', message);
+        });
+
+        socket.on('disconnect', () => {
+            socket.to(roomID).broadcast.emit('user-disconnected', userID);
+        });
+    });
 });
 
 //** ERROR HANDLING
@@ -99,6 +131,6 @@ app.use((err, req, res, next) => {
 
 //** APP.LISTEN
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+http.listen(port, () => {
     console.log(`Running: ${port}`);
 });

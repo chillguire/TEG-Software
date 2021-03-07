@@ -8,14 +8,14 @@
 
                 <div class="col-xl-10 col-lg-12 col-md-9">
 
-                    <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card overflow-hidden border-0 shadow-lg my-5">
                         <div class="card-body p-0">
                             <div class="row">
                                 <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
                                 <div class="col-lg-6">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4">Log in</h1>
+                                            <h1 class="h4 text-gray-900 mb-4">Inicia sesión</h1>
                                         </div>
 
                                         <%- include ('../partials/flash') -%>
@@ -28,36 +28,37 @@
                                                         class="form-control form-control-user" id="validationCustom01"
                                                         aria-describedby="email" placeholder="E-mail" required>
                                                     <div class="valid-feedback">
-                                                        Looks good!
+                                                        ¡No hay errores!
                                                     </div>
                                                     <div class="invalid-feedback">
-                                                        E-mail is not valid
+                                                        El e-mail no es válido
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="validationCustom02">Password</label>
+                                                    <label for="validationCustom02">Contraseña</label>
                                                     <input type="password" name="password"
                                                         class="form-control form-control-user" id="validationCustom02"
-                                                        placeholder="Password" required>
+                                                        placeholder="Contraseña" required>
 
                                                     <div class="valid-feedback">
-                                                        Looks good!
+                                                        ¡No hay errores!
                                                     </div>
                                                     <div class="invalid-feedback">
-                                                        Password is not valid
+                                                        La contraseña no es válida
                                                     </div>
                                                 </div>
 
-                                                <button class="btn btn-primary btn-user btn-block" type="submit">Log
-                                                    in</button>
+                                                <button class="btn btn-primary btn-user btn-block" type="submit">Iniciar
+                                                    sesión</button>
 
                                             </form>
 
 
                                             <hr>
                                             <div class="text-center">
-                                                <a class="small" href="/register">Create an Account!</a>
+                                                <a class="small" href="/register">¿No tienes una cuenta?
+                                                    ¡Regístrate!</a>
                                             </div>
                                     </div>
                                 </div>

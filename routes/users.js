@@ -5,17 +5,17 @@ const User = require('../models/user');
 
 const passport = require('passport');
 
-const { isLoggedIn } = require('../middleware/auth');
+const { isLoggedIn, /*isLoggedOut*/ } = require('../middleware/auth');
 
 const catchAsync = require('../utils/catchAsync');
 
 
 //** ROUTES
-router.get('/register', (req, res) => {
+router.get('/register', /*isLoggedOut,*/(req, res) => {
     res.render('users/register');
 });
 
-router.post('/register', catchAsync(async (req, res, next) => {
+router.post('/register', /*isLoggedOut,*/ catchAsync(async (req, res, next) => {
     try {
         const newUser = {
             firstName: req.body.firstName,
@@ -32,7 +32,7 @@ router.post('/register', catchAsync(async (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            req.flash('success', 'Welcome, you have successfully registered');
+            req.flash('success', '¡Bienvenido! Te has registrado exitosamente');
 
             res.redirect('/courses');
         });
@@ -42,24 +42,23 @@ router.post('/register', catchAsync(async (req, res, next) => {
     }
 }));
 
-router.get('/login', (req, res) => {
+router.get('/login', /*isLoggedOut,*/(req, res) => {
     res.render('users/login');
 });
 
-router.post('/login', passport.authenticate('local', {
+router.post('/login', /*isLoggedOut,*/ passport.authenticate('local', {
     // successRedirect: '/courses',
     failureRedirect: '/login',
     failureFlash: true
 }), (req, res, next) => {
-    req.flash('success', 'Welcome back!');
+    req.flash('success', '¡Bienvenido de nuevo! ');
     res.redirect('/courses');
 });
 
 router.get('/logout', isLoggedIn, (req, res) => {
     req.logout();
-    req.flash('success', 'Logged out');
+    req.flash('success', 'Desconectado exitosamente');
     res.redirect('/login');
-    console.log('logged out');
 });
 
 module.exports = router;

@@ -4,11 +4,12 @@ const router = express.Router();
 const Course = require('../models/course');
 
 const { isLoggedIn } = require('../middleware/auth');
+const { isValidMongoObject } = require('../middleware/verification');
+const { v4: uuidV4 } = require('uuid');
 
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const { courseSchema } = require('../schemas');
-const { isValidObjectId } = require('mongoose');
 
 
 //** MIDDLEWARE - will probably need later in other files
@@ -46,39 +47,36 @@ router.post('/', isLoggedIn, validateCourse, catchAsync(async (req, res, next) =
     const newCourse = {
         name: req.body.name,
         description: req.body.description,
+        roomID: uuidV4(),
     }
 
     const course = new Course(newCourse);
     await course.save();
 
-    req.flash('success', 'Successfully created a new course');
+    req.flash('success', 'Curso creado exitosamente');
 
     res.redirect(`/courses/${course._id}`);
 }));
 
-router.get('/:id', isLoggedIn, catchAsync(async (req, res) => {
-    if (!isValidObjectId(req.params.id)) {
-        req.flash('error', 'Course does not exist');
-        return res.redirect('/courses');
-    }
+router.get('/:id', isLoggedIn, isValidMongoObject, catchAsync(async (req, res) => {
     const course = await Course.findById(req.params.id);
     if (!course) {
-        req.flash('error', 'Course does not exist');
+        req.flash('error', 'El curso no existe');
         return res.redirect('/courses');
     }
     res.render('courses/show', { course });
 }));
 
-router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, isValidMongoObject, catchAsync(async (req, res) => {
     const course = await Course.findById(req.params.id);
     if (!course) {
-        req.flash('error', 'Course does not exist');
-        res.redirect('/courses');
+        req.flash('error', 'El curso no existe');
+        return res.redirect('/courses');
     }
     res.render('courses/edit', { course });
 }));
 
-router.put('/:id', isLoggedIn, validateCourse, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, isValidMongoObject, validateCourse, catchAsync(async (req, res) => {
     const editedCourse = {
         name: req.body.name,
         description: req.body.description,
@@ -86,15 +84,15 @@ router.put('/:id', isLoggedIn, validateCourse, catchAsync(async (req, res) => {
 
     const course = await Course.findByIdAndUpdate(req.params.id, { ...editedCourse });
 
-    req.flash('success', 'Successfully updated course');
+    req.flash('success', 'Curso actualizado exitosamente');
 
     res.redirect(`/courses/${course._id}`);
 }));
 
-router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, isValidMongoObject, catchAsync(async (req, res) => {
     await Course.findByIdAndDelete(req.params.id);
 
-    req.flash('success', 'Successfully deleted course');
+    req.flash('success', 'Curso eliminado exitosamente');
 
     res.redirect(`/courses`);
 }));

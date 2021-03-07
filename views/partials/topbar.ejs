@@ -4,10 +4,10 @@
     <div id="content">
 
         <!-- Topbar -->
-        <nav class="navbar navbar-expand bg-dark topbar mb-4 static-top shadow">
+        <nav class="navbar navbar-expand bg-dark topbar mb-4 shadow">
 
             <!-- Sidebar Toggle -->
-            <button id="sidebarToggleTop" class="btn btn-link  rounded-circle mr-3">
+            <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
                 <i class="fa fa-bars"></i>
             </button>
             <!-- Sidebar Toggle -->
@@ -26,20 +26,19 @@
                     <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                         aria-labelledby="messagesDropdown">
                         <h6 class="dropdown-header">
-                            Message Center
+                            Mensajes
                         </h6>
                         <a class="dropdown-item d-flex align-items-center" href="#">
                             <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="https://picsum.photos/200" alt="">
-                                <div class="status-indicator bg-success"></div>
+                                <img class="rounded-circle" src="http://placehold.it/200">
                             </div>
                             <div>
                                 <div class="text-truncate">Am I a good boy? The reason I ask is because someone
                                     told me that people say this to all dogs, even if they aren't good...</div>
-                                <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                                <div class="small">Chicken the Dog · 2w</div>
                             </div>
                         </a>
-                        <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                        <a class="dropdown-item text-center small" href="#">Read More Messages</a>
                     </div>
                 </li>
                 <!-- Nav Item - Messages -->
@@ -50,30 +49,22 @@
                 <li class="nav-item dropdown no-arrow">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                        <span class="mr-2 d-none d-lg-inline small">
                             <%= `${currentUser.firstName} ${currentUser.lastName}` %>
                         </span>
-                        <img class="img-profile rounded-circle" src="https://picsum.photos/200">
+                        <img class="img-profile rounded-circle" src="http://placehold.it/200">
                     </a>
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                         aria-labelledby="userDropdown">
                         <a class="dropdown-item" href="#">
-                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Profile
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Settings
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Activity Log
+                            <i class="fas fa-user fa-sm fa-fw mr-2 text-secondary"></i>
+                            Mi perfil
                         </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Logout
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-secondary"></i>
+                            Cerrar sesión
                         </a>
                     </div>
                 </li>

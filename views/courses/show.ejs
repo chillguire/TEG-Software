@@ -1,20 +1,114 @@
 <%- include ('../partials/head') -%>
     <%- include ('../partials/sidebar') -%>
         <%- include ('../partials/topbar') -%>
-            <ul>
-                <div class="row">
-                    <a href="/courses/<%= course.id %>/edit">Editar</a>
-                    <form action="/courses/<%= course.id %>?_method=DELETE" method="post">
-                        <button>Delete</button>
-                    </form>
+
+            <div class="container">
+                <div class="row mx-2 mb-4">
+                    <a href="/courses/<%= course.id %>/edit" class="btn btn-outline-primary mr-2">Editar</a>
+                    <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#deleteModal">
+                        Eliminar
+                    </a>
                 </div>
-                <li>
-                    <%= course.name %> - <%= course.description %> - <%= course.id %>
-                </li>
+
+                <div class="row">
+
+                    <!-- Main Col -->
+                    <div class="col-md-8">
+
+                        <!-- Info -->
+                        <h1 class="my-4">
+                            <%= course.name %>
+                        </h1>
+                        <p class="mb-10 description">
+                            <%= course.description %>
+                        </p>
+                        <!-- Info -->
+
+                        <!-- Lesson -->
+                        <div class="card mb-4">
+                            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
+                            <div class="card-body">
+                                <h2 class="card-title">Lesson title</h2>
+                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                    Reiciendis aliquid
+                                    atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi
+                                    vero
+                                    voluptate voluptatibus possimus, veniam magni quis!</p>
+                                <a href="#" class="btn btn-primary">Leer más &rarr;</a>
+                            </div>
+                            <div class="card-footer text-muted">
+                                Publicado el 02/05/2021</div>
+                        </div>
+                        <!-- Lesson -->
+                    </div>
+                    <!-- Main Col -->
+
+                    <!-- Sidebar Widgets Col -->
+                    <div class="col-md-4">
+
+                        <div class="card my-4">
+                            <h5 class="card-header">Profesor</h5>
+                            <div class="card-body">
+                                Profesor details goes here
+                            </div>
+                        </div>
+                        <div class="card my-4">
+                            <h5 class="card-header">Estudiantes</h5>
+                            <div class="card-body">
+                                Estudiantes details goes here
+                            </div>
+                        </div>
+
+                        <div class="card my-4">
+                            <h5 class="card-header">Otros</h5>
+                            <div class="card-body">
+                                <ul>
+                                    <li>Plan de evaluación</li>
+                                    <li>Otros detalles</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card my-4">
+                            <h5 class="card-header">Sala de videoconferencias</h5>
+                            <div class="card-body">
+                                <a class="btn btn-warning btn-block"
+                                    href="/courses/<%= course.id %>/<%= course.roomID %>">Ir a la sala
+                                    &rarr;</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Sidebar Widgets Col -->
+
+                </div>
+            </div>
 
 
-
-            </ul>
             <%- include ('../partials/footer') -%>
                 <%- include ('../partials/modal') -%>
+                    <!-- Delete Modal-->
+                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Eliminar</h5>
+                                    <button class="close dismissable" type="button" data-dismiss="modal"
+                                        aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">¿Seguro de que quieres eliminar este curso?
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-warning" type="button" data-dismiss="modal">Cancelar</button>
+                                    <form action="/courses/<%= course.id %>?_method=DELETE" method="post">
+                                        <button class="btn btn-danger ">Eliminar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Delete Modal-->
                     <%- include ('../partials/scripts') -%>
