@@ -18,10 +18,11 @@ const peerServer = ExpressPeerServer(http, {
     debug: true
 });
 
-const { isLoggedIn } = require('./middleware/auth');
+const { isLoggedIn } = require('./middleware/middleware');
 
-const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
 
 
 //** DB
@@ -42,18 +43,23 @@ db.once('open', function () {
 app.use(express.urlencoded({ extended: true, }));
 // app.use(express.json());
 
+app.use(flash());
 app.use(methodOverride('_method'));
+app.use(mongoSanitize());
+app.use(helmet({ contentSecurityPolicy: false, }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const sessionConfig = {
+    name: 'SessionLMS',
     secret: 'Chavez no puede ver esto porqué está MUERTO',
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
+        // secure: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // ms/s * s/m * m/h * h/d * d/w
         maxAge: 1000 * 60 * 60 * 24 * 7,
     }

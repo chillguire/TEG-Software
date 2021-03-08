@@ -99,10 +99,11 @@ h6.text-primary{
     width: 2.5rem;
 }
 .topbar #sidebarToggleTop:hover {
-    background-color: #3b4248;
+    background-color: #292C2F;
 }
 .topbar #sidebarToggleTop:active {
-    background-color: #434e57;
+    background-color: #363C42;
+    color: #2fa1db !important
 }
 .topbar .topbar-divider {
     width: 0;

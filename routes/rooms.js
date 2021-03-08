@@ -3,11 +3,9 @@ const router = express.Router();
 
 const Course = require('../models/course');
 
-const { isLoggedIn } = require('../middleware/auth');
-const { isValidMongoObject } = require('../middleware/verification');
+const { isLoggedIn, isValidMongoObject } = require('../middleware/middleware');
 
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
 
 
 //** ROUTES
@@ -24,5 +22,6 @@ router.get('/:id/:room', isLoggedIn, isValidMongoObject, catchAsync(async (req, 
     }
     res.render('courses/room', { roomID: room, course: course });
 }));
+
 
 module.exports = router;
