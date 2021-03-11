@@ -5,15 +5,13 @@ const users = require('../controller/users');
 
 const passport = require('passport');
 
-const { isLoggedIn, /*isLoggedOut*/ } = require('../middleware/middleware');
-
-const catchAsync = require('../utils/catchAsync');
+const { isLoggedIn, /*isLoggedOut,*/ validateUser } = require('../middleware/middleware');
 
 
 //** ROUTES
 router.route('/register')
     .get(/*isLoggedOut,*/users.new)
-    .post(/*isLoggedOut,*/ catchAsync(users.create));
+    .post(/*isLoggedOut,*/ validateUser, users.create);
 
 router.route('/login')
     .get(/*isLoggedOut,*/users.login)

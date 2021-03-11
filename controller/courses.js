@@ -1,66 +1,98 @@
 const Course = require('../models/course');
 const { v4: uuidV4 } = require('uuid');
 
+const sanitizeHtml = require('sanitize-html');
+
 
 module.exports.index = async (req, res) => {
-    const courses = await Course.find({})
+    const courses = await Course.find({}).sort({ createdAt: 'desc' });
     res.render('courses/index', { courses });
 }
 
 module.exports.new = (req, res) => {
-    res.render('courses/new');
+    if (req.session.course) {
+        const course = req.session.course;
+        req.session.course = null;
+        res.render('courses/new', { course: course });
+    } else {
+        const course = {
+            name: '',
+            description: '',
+        }
+        res.render('courses/new', { course: course });
+    }
 }
 
 module.exports.create = async (req, res, next) => {
     const newCourse = {
-        name: req.body.name,
-        description: req.body.description,
+        name: sanitizeHtml(req.body.name, {
+            allowedTags: [],
+            allowedAttributes: {}
+        }),
+        description: sanitizeHtml(req.body.description, {
+            allowedTags: [],
+            allowedAttributes: {}
+        }),
         roomID: uuidV4(),
     }
-
     const course = new Course(newCourse);
-    await course.save();
 
-    req.flash('success', 'Curso creado exitosamente');
-
-    res.redirect(`/courses/${course._id}`);
+    try {
+        await course.save();
+        req.flash('success', 'Curso creado exitosamente');
+        res.redirect(`/courses/${course._id}`);
+    } catch (error) {
+        res.redirect(`/courses/new`);
+    }
 }
 
 module.exports.show = async (req, res) => {
-    const course = await Course.findById(req.params.id);
-    if (!course) {
-        req.flash('error', 'El curso no existe');
-        return res.redirect('/courses');
-    }
-    res.render('courses/show', { course });
+    const course = await res.locals.course
+        .populate({
+            path: 'lessons',
+            options: { sort: { createdAt: 'asc' } }
+        })
+        .populate('instructor')
+        .execPopulate();
+    console.log(course);
+    res.render('courses/show', { course: course });
 }
 
-module.exports.edit = async (req, res) => {
-    const course = await Course.findById(req.params.id);
-    if (!course) {
-        req.flash('error', 'El curso no existe');
-        return res.redirect('/courses');
+module.exports.edit = (req, res) => {
+    if (req.session.course) {
+        const course = req.session.course;
+        req.session.course = null;
+        res.render('courses/edit', { course: course });
+    } else {
+        res.render('courses/edit', { course: res.locals.course });
     }
-    res.render('courses/edit', { course });
 }
 
 module.exports.update = async (req, res) => {
     const editedCourse = {
-        name: req.body.name,
-        description: req.body.description,
+        name: sanitizeHtml(req.body.name, {
+            allowedTags: [],
+            allowedAttributes: {}
+        }),
+        description: sanitizeHtml(req.body.description, {
+            allowedTags: [],
+            allowedAttributes: {}
+        }),
+        createdAt: Date.now(),
     }
 
-    const course = await Course.findByIdAndUpdate(req.params.id, { ...editedCourse });
-
-    req.flash('success', 'Curso actualizado exitosamente');
-
-    res.redirect(`/courses/${course._id}`);
+    try {
+        await Course.findOneAndUpdate({ _id: req.params.id }, { ...editedCourse }, { new: true, runValidators: true });
+        req.flash('success', 'Curso actualizado exitosamente');
+        res.redirect(`/courses/${res.locals.course._id}`);
+    } catch (error) {
+        res.redirect(`/courses/${res.locals.course._id}/edit`);
+    }
 }
 
 module.exports.delete = async (req, res) => {
     await Course.findByIdAndDelete(req.params.id);
 
     req.flash('success', 'Curso eliminado exitosamente');
-
     res.redirect(`/courses`);
 }

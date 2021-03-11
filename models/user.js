@@ -22,10 +22,10 @@ const userSchema = new Schema({
         required: true,
         unique: true,
     },
-    // type: {isadmin, isteacher, istudent, etc}
+
 });
 
 userSchema.plugin(passportLocalMongoose);
 
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema);

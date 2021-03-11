@@ -5,11 +5,13 @@
                 <div class="row justify-content-lg-center">
                     <div class="col col-lg-8">
 
+                        <h3>Crear curso</h3>
+
                         <form class="user needs-validation" action="/courses" method="post" novalidate>
                             <div class="form-group">
                                 <label for="validationCustom01">Nombre</label>
                                 <input type="text" class="form-control form-control-user" id="validationCustom01"
-                                    placeholder="Nombre" name="name" required>
+                                    placeholder="Nombre" name="name" value="<%= course.name %>" required>
                                 <div class="valid-feedback">
                                     ¡No hay errores!
                                 </div>
@@ -20,7 +22,8 @@
                             <div class="form-group">
                                 <label for="validationCustom02">Descripción</label>
                                 <textarea class="form-control form-control-user" id="validationCustom02"
-                                    placeholder="Descripción" name="description" required></textarea>
+                                    placeholder="Descripción" name="description"
+                                    required><%= course.description %></textarea>
                                 <div class="valid-feedback">
                                     ¡No hay errores!
                                 </div>

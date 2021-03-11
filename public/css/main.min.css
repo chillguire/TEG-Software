@@ -1,7 +1,6 @@
 html {
     position: relative;
     min-height: 100%;
-    overflow-x: hidden;
 }
 body {
     height: 100%;
@@ -41,6 +40,10 @@ body {
 .sidebar .nav-item .collapse-inner {
     animation-name: growIn;
     animation-duration: 0.25s;
+}
+i.fa-fw{
+    font-size: 1.5rem;
+    vertical-align: bottom;
 }
 a{
     transition: all 0.25s !important;
@@ -375,10 +378,6 @@ body.sidebar-toggled footer.sticky-footer {
 .card-header{
     background-color: rgba(0,0,0,0.25) !important;
 }
-html>.modal-open {
-    overflow-y: hidden;
-    position: fixed;
-}
 .modal-content{
     background-color: #242324 !important;
 }
@@ -411,8 +410,12 @@ textarea {
     border-radius: 25px !important;
     padding: 1em !important;
     min-height:2em;
+    resize: none;
+    overflow-y: hidden;
 }
-
+pre{
+    color:#c5c5c5;
+}
 .description{
     word-wrap: break-word;
 }

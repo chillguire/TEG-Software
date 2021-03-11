@@ -4,9 +4,12 @@
 
             <div class="container">
                 <div class="row mx-2 mb-4">
-                    <a href="/courses/<%= course.id %>/edit" class="btn btn-outline-primary mr-2">Editar</a>
-                    <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#deleteModal">
+                    <a href="/courses/<%= course._id %>/edit" class="btn btn-outline-warning mr-2">Editar</a>
+                    <a class="btn btn-outline-danger mr-2" href="#" data-toggle="modal" data-target="#deleteModal">
                         Eliminar
+                    </a>
+                    <a class="btn btn-outline-primary" href="/courses/<%= course._id %>/lessons/new">
+                        Añadir lección
                     </a>
                 </div>
 
@@ -24,22 +27,32 @@
                         </p>
                         <!-- Info -->
 
-                        <!-- Lesson -->
-                        <div class="card mb-4">
-                            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
-                            <div class="card-body">
-                                <h2 class="card-title">Lesson title</h2>
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                    Reiciendis aliquid
-                                    atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi
-                                    vero
-                                    voluptate voluptatibus possimus, veniam magni quis!</p>
-                                <a href="#" class="btn btn-primary">Leer más &rarr;</a>
+                        <hr>
+
+                        <h2 class="my-4">
+                            Lecciones
+                        </h2>
+                        <% for( let i=0; i < course.lessons.length; i++ ) { %>
+                            <!-- Lesson -->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h3 class="card-title">
+                                        <%= course.lessons[i].name %>
+                                    </h3>
+                                    <p class="card-text text-truncate">
+                                        <%= course.lessons[i].descriptionMD %>
+                                    </p>
+                                    <a href="/courses/<%= course._id %>/lessons/<%= course.lessons[i]._id %>"
+                                        class="btn btn-primary mr-2">Leer más
+                                        &rarr;</a>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    Publicado el <%= course.lessons[i].createdAt.toLocaleDateString('es-ES') %>
+                                </div>
                             </div>
-                            <div class="card-footer text-muted">
-                                Publicado el 02/05/2021</div>
-                        </div>
-                        <!-- Lesson -->
+                            <!-- Lesson -->
+                            <% } %>
+
                     </div>
                     <!-- Main Col -->
 
@@ -73,14 +86,13 @@
                             <h5 class="card-header">Sala de videoconferencias</h5>
                             <div class="card-body">
                                 <a class="btn btn-warning btn-block"
-                                    href="/courses/<%= course.id %>/<%= course.roomID %>">Ir a la sala
+                                    href="/courses/<%= course._id %>/<%= course.roomID %>">Ir a la sala
                                     &rarr;</a>
                             </div>
                         </div>
 
                     </div>
                     <!-- Sidebar Widgets Col -->
-
                 </div>
             </div>
 
@@ -103,7 +115,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-warning" type="button" data-dismiss="modal">Cancelar</button>
-                                    <form action="/courses/<%= course.id %>?_method=DELETE" method="post">
+                                    <form action="/courses/<%= course._id %>?_method=DELETE" method="post">
                                         <button class="btn btn-danger ">Eliminar</button>
                                     </form>
                                 </div>

@@ -95,8 +95,8 @@ app.use('/courses', courseRoutes);
 const roomRoutes = require('./routes/rooms');
 app.use('/courses', roomRoutes);
 
-// const lessons = require('./routes/lessons');
-// app.use('/courses/:id/lessons', lessons);
+const lessons = require('./routes/lessons');
+app.use('/courses/:id/lessons', lessons);
 
 const userRoutes = require('./routes/users');
 app.use(userRoutes);
@@ -124,15 +124,6 @@ io.on('connection', (socket) => {
             socket.to(roomID).broadcast.emit('user-disconnected', userID);
         });
     });
-});
-
-//** ERROR HANDLING
-app.use((err, req, res, next) => {
-    const { statusCode = 500 } = err;
-    if (!err.message) {
-        err.message = 'Something went wrong';
-    }
-    res.status(statusCode).render('error', { err });
 });
 
 //** APP.LISTEN

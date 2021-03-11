@@ -1,19 +1,18 @@
 <%- include ('../partials/head') -%>
     <%- include ('../partials/sidebar') -%>
         <%- include ('../partials/topbar') -%>
-
             <div class="container">
                 <div class="row justify-content-lg-center">
                     <div class="col col-lg-8">
 
-                        <h3>Editar curso</h3>
+                        <h3>Nueva lección</h3>
 
-                        <form class="user needs-validation" action="/courses/<%= course._id %>?_method=PUT"
-                            method="post" novalidate>
+                        <form class="user needs-validation" action="/courses/<%- course.id %>/lessons" method="post"
+                            novalidate>
                             <div class="form-group">
                                 <label for="validationCustom01">Nombre</label>
                                 <input type="text" class="form-control form-control-user" id="validationCustom01"
-                                    placeholder="Nombre" name="name" value="<%= course.name %>" required>
+                                    placeholder="Nombre" name="name" value="<%= lesson.name %>" required>
                                 <div class="valid-feedback">
                                     ¡No hay errores!
                                 </div>
@@ -25,7 +24,10 @@
                                 <label for="validationCustom02">Descripción</label>
                                 <textarea class="form-control form-control-user" id="validationCustom02"
                                     placeholder="Descripción" name="description"
-                                    required><%= course.description %></textarea>
+                                    required><%= lesson.description %></textarea>
+                                <small id="passwordHelpBlock" class="form-text text-muted">
+                                    ¡Puedes utilizar Markdown para personalizar la estrucutra de la lección!
+                                </small>
                                 <div class="valid-feedback">
                                     ¡No hay errores!
                                 </div>
@@ -38,6 +40,7 @@
                     </div>
                 </div>
             </div>
+
             <%- include ('../partials/footer') -%>
                 <%- include ('../partials/modal') -%>
                     <%- include ('../partials/scripts') -%>

@@ -23,7 +23,8 @@
                                                 <label for="validationCustom01">Nombre</label>
                                                 <input type="text" name="firstName"
                                                     class="form-control form-control-user" id="validationCustom01"
-                                                    aria-describedby="first name" placeholder="Nombre" required>
+                                                    aria-describedby="first name" placeholder="Nombre"
+                                                    value="<%= user.firstName %>" required>
                                                 <div class="valid-feedback">
                                                     ¡No hay errores!
                                                 </div>
@@ -35,7 +36,8 @@
                                                 <label for="validationCustom02">Apellido</label>
                                                 <input type="text" name="lastName"
                                                     class="form-control form-control-user" id="validationCustom02"
-                                                    aria-describedby="first name" placeholder="Apellido" required>
+                                                    aria-describedby="first name" placeholder="Apellido"
+                                                    value="<%= user.lastName %>" required>
                                                 <div class="valid-feedback">
                                                     ¡No hay errores!
                                                 </div>
@@ -49,7 +51,7 @@
                                             <label for="validationCustom03">E-mail</label>
                                             <input type="email" name="email" class="form-control form-control-user"
                                                 id="validationCustom03" aria-describedby="email" placeholder="E-mail"
-                                                required>
+                                                value="<%= user.email %>" required>
                                             <div class="valid-feedback">
                                                 ¡No hay errores!
                                             </div>

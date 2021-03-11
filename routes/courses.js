@@ -3,24 +3,22 @@ const router = express.Router();
 
 const courses = require('../controller/courses');
 
-const { isLoggedIn, isValidMongoObject, validateCourse } = require('../middleware/middleware');
-
-const catchAsync = require('../utils/catchAsync');
+const { isLoggedIn, doesCourseExists, validateCourse } = require('../middleware/middleware');
 
 
 //** ROUTES
 router.route('/')
-    .get(isLoggedIn, catchAsync(courses.index))
-    .post(isLoggedIn, validateCourse, catchAsync(courses.create));
+    .get(isLoggedIn, courses.index)
+    .post(isLoggedIn, validateCourse, courses.create);
 
 router.get('/new', isLoggedIn, courses.new);
 
 router.route('/:id')
-    .get(isLoggedIn, isValidMongoObject, catchAsync(courses.show))
-    .put(isLoggedIn, isValidMongoObject, validateCourse, catchAsync(courses.update))
-    .delete(isLoggedIn, isValidMongoObject, catchAsync(courses.delete));
+    .get(isLoggedIn, doesCourseExists, courses.show)
+    .put(isLoggedIn, doesCourseExists, validateCourse, courses.update)
+    .delete(isLoggedIn, doesCourseExists, courses.delete);
 
-router.get('/:id/edit', isLoggedIn, isValidMongoObject, catchAsync(courses.edit));
+router.get('/:id/edit', isLoggedIn, doesCourseExists, courses.edit);
 
 
 module.exports = router;

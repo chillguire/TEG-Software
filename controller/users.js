@@ -1,17 +1,42 @@
 const User = require('../models/user');
 
+const sanitizeHtml = require('sanitize-html');
+
 
 module.exports.new = (req, res) => {
-    res.render('users/register');
+    if (req.session.user) {
+        const user = req.session.user;
+        req.session.user = null;
+        res.render('users/register', { user: user });
+    } else {
+        const user = {
+            firstName: '',
+            lastName: '',
+            email: '',
+        }
+        res.render('users/register', { user: user });
+    }
 }
 
 module.exports.create = async (req, res, next) => {
     try {
         const newUser = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            username: req.body.email,
-            email: req.body.email,
+            firstName: sanitizeHtml(req.body.firstName, {
+                allowedTags: [],
+                allowedAttributes: {}
+            }),
+            lastName: sanitizeHtml(req.body.lastName, {
+                allowedTags: [],
+                allowedAttributes: {}
+            }),
+            username: sanitizeHtml(req.body.email, {
+                allowedTags: [],
+                allowedAttributes: {}
+            }),
+            email: sanitizeHtml(req.body.email, {
+                allowedTags: [],
+                allowedAttributes: {}
+            }),
         }
         const pass = req.body.password;
 
@@ -22,12 +47,11 @@ module.exports.create = async (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            req.flash('success', '¡Bienvenido! Te has registrado exitosamente');
 
+            req.flash('success', '¡Bienvenido! Te has registrado exitosamente');
             res.redirect('/courses');
         });
-    } catch (e) {
-        req.flash('error', e.message);
+    } catch (error) {
         res.redirect('/register');
     }
 }
