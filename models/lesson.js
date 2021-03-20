@@ -28,11 +28,12 @@ const lessonSchema = new Schema({
         ref: 'Course',
         required: true,
     },
-    instructor: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        // required: true,
-    },
+    // instructor: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'User',
+    // required: true,
+    // },
 });
+
 
 module.exports = mongoose.model('Lesson', lessonSchema);

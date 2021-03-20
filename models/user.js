@@ -22,10 +22,24 @@ const userSchema = new Schema({
         required: true,
         unique: true,
     },
-
+    type: {
+        type: String,
+        enum: ['Admin', 'Instructor', 'Student'],
+        default: 'Student',
+    },
 });
 
-userSchema.plugin(passportLocalMongoose);
+const options = {
+    errorMessages: {
+        MissingPasswordError: 'No se proporcionó una contraseña',
+        IncorrectPasswordError: 'Usuario o contraseña incorrectos',
+        IncorrectUsernameError: 'Usuario o contraseña incorrectos',
+        MissingUsernameError: 'No se proporcionó un e-mail',
+        UserExistsError: 'Ya existe un usuario con ese e-mail'
+    },
+};
+
+userSchema.plugin(passportLocalMongoose, options);
 
 
 module.exports = mongoose.model('User', userSchema);

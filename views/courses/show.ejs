@@ -1,126 +1,153 @@
 <%- include ('../partials/head') -%>
-    <%- include ('../partials/sidebar') -%>
-        <%- include ('../partials/topbar') -%>
+<%- include ('../partials/sidebar') -%>
+<%- include ('../partials/topbar') -%>
 
-            <div class="container">
-                <div class="row mx-2 mb-4">
-                    <a href="/courses/<%= course._id %>/edit" class="btn btn-outline-warning mr-2">Editar</a>
-                    <a class="btn btn-outline-danger mr-2" href="#" data-toggle="modal" data-target="#deleteModal">
-                        Eliminar
-                    </a>
-                    <a class="btn btn-outline-primary" href="/courses/<%= course._id %>/lessons/new">
-                        Añadir lección
-                    </a>
+<div class="container">
+
+    <% if (currentUser.type==='Admin' ) { %>
+        <div class="row mx-2 mb-4">
+            <a href="/courses/<%= course._id %>/edit" class="btn btn-outline-warning mr-2">Editar</a>
+            <a class="btn btn-outline-danger mr-2" href="#" data-toggle="modal" data-target="#deleteModal">
+                Eliminar
+            </a>
+        </div>
+    <% } %>
+    
+    <% if (course.instructor) { %>
+        <% if (currentUser.type==='Instructor' && currentUser._id.equals(course.instructor._id) ) { %>
+            <div class="row mx-2 mb-4">
+                <a class="btn btn-outline-primary" href="/courses/<%= course._id %>/lessons/new">Añadir lección</a>
+            </div>
+        <% } %>
+    <% } %>
+    
+
+    <div class="row">
+
+        <!-- Main Col -->
+        <div class="col-md-8">
+
+            <!-- Info -->
+            <h1 class="my-4">
+                <%= course.name %>
+            </h1>
+            <p class="mb-10 description">
+                <%= course.description %>
+            </p>
+            <!-- Info -->
+
+            <hr>
+
+            <h2 class="my-4">
+                Lecciones
+            </h2>
+
+            <% for( let i=0; i < course.lessons.length; i++ ) { %>
+                <!-- Lesson -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <%= course.lessons[i].name %>
+                        </h3>
+                        <p class="card-text text-truncate">
+                            <%= course.lessons[i].descriptionMD %>
+                        </p>
+                        <a href="/courses/<%= course._id %>/lessons/<%= course.lessons[i]._id %>"
+                            class="btn btn-primary mr-2">Leer más
+                            &rarr;</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Publicado el <%=
+                            course.lessons[i].createdAt.toLocaleDateString('es-ES') %>
+                    </div>
+                </div>
+                <!-- Lesson -->
+            <% } %>
+            <hr>
+
+        </div>
+        <!-- Main Col -->
+        <!-- Sidebar Widgets Col -->
+        <div class="col-md-4">
+            <div class="card my-4">
+                <h5 class="card-header">Profesor</h5>
+
+                <div class="card-body">
+                <% if (course.instructor) { %>
+                    <%= `${course.instructor.firstName} ${course.instructor.lastName}` %>
+                <% } else if (currentUser.type==='Admin' ) { %>
+                    <a class="btn btn-primary btn-block" href="/courses/<%= course._id %>/edit">Añadir profesor</a>
+                <% } else { %>
+                    Aún no hay un profesor asignado
+                <% } %>
                 </div>
 
-                <div class="row">
+            </div>
+            <div class="card my-4">
+                <h5 class="card-header">Estudiantes</h5>
 
-                    <!-- Main Col -->
-                    <div class="col-md-8">
+                <div class="card-body">
+                <% if (course.students.length) { %>
+                    <% for( let i=0; i < course.students.length; i++ ) { %>
+                        <%= course.students[i].firstName %>
+                    <% } %>
+                <% } else { %>
+                    Aún no hay estudiantes asignados
+                <% } %>
+                <% if (currentUser.type==='Admin' ) {%>
+                    <a class="btn btn-primary btn-block" href="/courses/<%= course._id %>/students">Añadir estudiantes</a>
+                <% } %>
+                </div>
 
-                        <!-- Info -->
-                        <h1 class="my-4">
-                            <%= course.name %>
-                        </h1>
-                        <p class="mb-10 description">
-                            <%= course.description %>
-                        </p>
-                        <!-- Info -->
+            </div>
 
-                        <hr>
-
-                        <h2 class="my-4">
-                            Lecciones
-                        </h2>
-                        <% for( let i=0; i < course.lessons.length; i++ ) { %>
-                            <!-- Lesson -->
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <h3 class="card-title">
-                                        <%= course.lessons[i].name %>
-                                    </h3>
-                                    <p class="card-text text-truncate">
-                                        <%= course.lessons[i].descriptionMD %>
-                                    </p>
-                                    <a href="/courses/<%= course._id %>/lessons/<%= course.lessons[i]._id %>"
-                                        class="btn btn-primary mr-2">Leer más
-                                        &rarr;</a>
-                                </div>
-                                <div class="card-footer text-muted">
-                                    Publicado el <%= course.lessons[i].createdAt.toLocaleDateString('es-ES') %>
-                                </div>
-                            </div>
-                            <!-- Lesson -->
-                            <% } %>
-
-                    </div>
-                    <!-- Main Col -->
-
-                    <!-- Sidebar Widgets Col -->
-                    <div class="col-md-4">
-
-                        <div class="card my-4">
-                            <h5 class="card-header">Profesor</h5>
-                            <div class="card-body">
-                                Profesor details goes here
-                            </div>
-                        </div>
-                        <div class="card my-4">
-                            <h5 class="card-header">Estudiantes</h5>
-                            <div class="card-body">
-                                Estudiantes details goes here
-                            </div>
-                        </div>
-
-                        <div class="card my-4">
-                            <h5 class="card-header">Otros</h5>
-                            <div class="card-body">
-                                <ul>
-                                    <li>Plan de evaluación</li>
-                                    <li>Otros detalles</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="card my-4">
-                            <h5 class="card-header">Sala de videoconferencias</h5>
-                            <div class="card-body">
-                                <a class="btn btn-warning btn-block"
-                                    href="/courses/<%= course._id %>/<%= course.roomID %>">Ir a la sala
-                                    &rarr;</a>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- Sidebar Widgets Col -->
+            <div class="card my-4">
+                <h5 class="card-header">Otros</h5>
+                <div class="card-body">
+                    <ul>
+                        <li>Plan de evaluación</li>
+                        <li>Otros detalles</li>
+                    </ul>
                 </div>
             </div>
 
+            <div class="card my-4">
+                <h5 class="card-header">Sala de videoconferencias</h5>
+                <div class="card-body">
+                    <a class="btn btn-warning btn-block" href="/courses/<%= course._id %>/<%= course.roomID %>">Ir a la sala &rarr;</a>
+                </div>
+            </div>
 
-            <%- include ('../partials/footer') -%>
-                <%- include ('../partials/modal') -%>
-                    <!-- Delete Modal-->
-                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal"
-                        aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Eliminar</h5>
-                                    <button class="close dismissable" type="button" data-dismiss="modal"
-                                        aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">¿Seguro de que quieres eliminar este curso?
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-warning" type="button" data-dismiss="modal">Cancelar</button>
-                                    <form action="/courses/<%= course._id %>?_method=DELETE" method="post">
-                                        <button class="btn btn-danger ">Eliminar</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Delete Modal-->
-                    <%- include ('../partials/scripts') -%>
+        </div>
+        <!-- Sidebar Widgets Col -->
+    </div>
+</div>
+
+
+<%- include ('../partials/footer') -%>
+<%- include ('../partials/modal') -%>
+<!-- Delete Modal-->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Eliminar</h5>
+                <button class="close dismissable" type="button" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">¿Seguro de que quieres eliminar este curso?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" type="button" data-dismiss="modal">Cancelar</button>
+                <form action="/courses/<%= course._id %>?_method=DELETE" method="post">
+                    <button class="btn btn-danger ">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal-->
+<%- include ('../partials/scripts') -%>

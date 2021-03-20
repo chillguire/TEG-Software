@@ -1,8 +1,12 @@
 const { isValidObjectId } = require('mongoose');
 const Course = require('../models/course');
 const Lesson = require('../models/lesson');
+const User = require('../models/user');
 
-//check if lesson/course exists (or if param is a valid mongo object)
+const { courseSchema, lessonSchema, userSchema } = require('./schemas');
+
+
+// check if lesson/course exists (or if param is a valid mongo object)
 module.exports.doesCourseExists = async function (req, res, next) {
     let course;
     if (!isValidObjectId(req.params.id) || !(course = await Course.findById(req.params.id))) {
@@ -25,20 +29,55 @@ module.exports.doesLessonExists = async function (req, res, next) {
 // check if user is logged in
 module.exports.isLoggedIn = function (req, res, next) {
     if (!req.isAuthenticated()) {
-        req.flash('warning', 'Necesitas haber iniciado sesión para hacer eso');
+        req.flash('warning', 'Necesitas iniciar sesión para hacer eso');
         return res.redirect('/login');
     }
     next();
 }
 
+// check user role
+module.exports.isAdmin = function (req, res, next) {
+    if (!(req.user.type === 'Admin')) {
+        req.flash('warning', 'No tienes los permisos para hacer eso');
+        return res.redirect('/courses');
+    }
+    next();
+}
+module.exports.isInstructor = function (req, res, next) {
+    if (!(req.user.type === 'Instructor')) {
+        req.flash('warning', 'No tienes los permisos para hacer eso');
+        return res.redirect('/courses');
+    }
+    next();
+}
+
+// check if user has authorization 
+module.exports.belongsToCourse = function (req, res, next) {
+    if ((req.user.type === 'Admin') || (req.user._id.equals(res.locals.course.instructor)) || res.locals.course.students.includes(req.user._id)) {
+        return next();
+    }
+    req.flash('warning', 'No puedes acceder a este curso');
+    return res.redirect('/courses');
+}
+
+// retrieve list of x roles
+module.exports.availableInstructors = async function (req, res, next) {
+    const instructors = await User.find({ type: 'Instructor' }).sort({ firstName: 'desc' });
+    res.locals.instructors = instructors;
+    next();
+}
+module.exports.availableStudents = async function (req, res, next) {
+    const students = await User.find({ type: 'Student' }).sort({ firstName: 'desc' });
+    res.locals.students = students;
+    next();
+}
+
 // validate inputs
-const { courseSchema, lessonSchema, userSchema } = require('../schemas');
-
-
 module.exports.validateCourse = function (req, res, next) {
     const course = {
         name: req.body.name,
         description: req.body.description,
+        instructor: req.body.instructor,
     }
 
     const { error } = courseSchema.validate(course, { abortEarly: false });
@@ -70,7 +109,6 @@ module.exports.validateLesson = function (req, res, next) {
     }
     next();
 }
-
 module.exports.validateUser = function (req, res, next) {
     const user = {
         firstName: req.body.firstName,

@@ -3,45 +3,48 @@
         <%- include ('../partials/topbar') -%>
 
             <div class="container">
-                <div class="row mx-2 mb-4">
-                    <a href="/courses/<%= lesson.course %>/lessons/<%= lesson._id %>/edit"
-                        class="btn btn-outline-warning mr-2">Editar</a>
-                    <a class="btn btn-outline-danger mr-2" href="#" data-toggle="modal" data-target="#deleteModal">
-                        Eliminar
-                    </a>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-
-                        <h1 class="mt-4">
-                            <%= lesson.name %>
-                        </h1>
-
-                        <p class="lead">
-                            Por
-                            <a href="#">Profesor</a>
-                        </p>
-
-                        <hr>
-
-                        <p class="text-muted">
-                            Publicado el <%= lesson.createdAt.toLocaleDateString('es-ES', {weekday: 'long' ,
-                                year: 'numeric' , month: 'long' , day: 'numeric' }) %> a las <%=
-                                    lesson.createdAt.toLocaleTimeString('es-ES', {hour12: true, hour: '2-digit' ,
-                                    minute: '2-digit' } ) %>
-                        </p>
-
-                        <hr>
-
-                        <div class="container">
-                            <%- lesson.sanitizedDescription %>
-                        </div>
-
+            <% if (course.instructor) { %>
+                <% if ( currentUser.type==='Instructor' && currentUser._id.equals(course.instructor._id)) { %>
+                    <div class="row mx-2 mb-4">
+                        <a href="/courses/<%= lesson.course %>/lessons/<%= lesson._id %>/edit"
+                            class="btn btn-outline-warning mr-2">Editar</a>
+                        <a class="btn btn-outline-danger mr-2" href="#" data-toggle="modal" data-target="#deleteModal">
+                            Eliminar
+                        </a>
                     </div>
-                    <!-- Main Col -->
+                <% } %>
+            <% } %>
+                        <div class="row">
+                            <div class="col">
 
-                </div>
+                                <h1 class="mt-4">
+                                    <%= lesson.name %>
+                                </h1>
+
+                                <p class="lead">
+                                    Por
+                                    <a href="#">Profesor</a>
+                                </p>
+
+                                <hr>
+
+                                <p class="text-muted">
+                                    Publicado el <%= lesson.createdAt.toLocaleDateString('es-ES', {weekday: 'long' ,
+                                        year: 'numeric' , month: 'long' , day: 'numeric' }) %> a las <%=
+                                            lesson.createdAt.toLocaleTimeString('es-ES', {hour12: true, hour: '2-digit'
+                                            , minute: '2-digit' } ) %>
+                                </p>
+
+                                <hr>
+
+                                <div class="container">
+                                    <%- lesson.sanitizedDescription %>
+                                </div>
+
+                            </div>
+                            <!-- Main Col -->
+
+                        </div>
             </div>
 
             <%- include ('../partials/footer') -%>

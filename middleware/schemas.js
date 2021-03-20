@@ -14,6 +14,8 @@ module.exports.courseSchema = Joi.object({
             'string.empty': `"Descripción" no puede estar vacío`,
             'any.required': `"Descripción" es un campo requerido`,
         }),
+    instructor: Joi.string()
+        .allow(''),
 });
 
 module.exports.lessonSchema = Joi.object({
@@ -45,19 +47,15 @@ module.exports.userSchema = Joi.object({
             'any.required': `"Apellido" es un campo requerido`,
         }),
     email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+        .email({ minDomainSegments: 2, tlds: { allow: true } })
         .required()
         .messages({
-            'string.email': `"E-mail" no es una dirección válida`,
             'string.empty': `"E-mail" no puede estar vacío`,
             'any.required': `"E-mail" es un campo requerido`,
         }),
     password: Joi.string()
-        .min(8)
-        .max(128)
         .required()
         .messages({
-            'string.min': `"Contraseña" debe tener mínimo 8 caracteres`,
             'string.empty': `"Contraseña" no puede estar vacío`,
             'any.required': `"Contraseña" es un campo requerido`,
         }),

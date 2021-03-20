@@ -1,0 +1,47 @@
+<%- include ('../partials/head') -%>
+<%- include ('../partials/sidebar') -%>
+<%- include ('../partials/topbar') -%>
+
+<div class="container">
+    <div class="row justify-content-lg-center">
+        <div class="col col-lg-8">
+
+            <h3>Estudiantes para el curso <%= course.name %></h3>
+
+            <form class="user needs-validation" action="/courses/<%= course._id %>/students?_method=PUT"
+                method="post" novalidate>
+                
+                <div class="form-group">
+ 
+                <% for (let i=0; i < students.length; i++) { %>
+
+                    <% if (course.students.includes(`${students[i]._id}`)) {%>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="form-control form-control-user custom-control-input" id="customSwitch<%= i+1 %>" name="students[]" value="<%= `${students[i]._id}` %>" checked>
+
+                            <label class="custom-control-label" for="customSwitch<%= i+1 %>">
+                                <%= `${students[i].firstName} ${students[i].lastName}` %>
+                            </label>
+                        </div>
+                         <% continue; %>
+                    <%} %>
+
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="form-control form-control-user custom-control-input" id="customSwitch<%= i+1 %>" name="students[]" value="<%= `${students[i]._id}` %>">
+
+                        <label class="custom-control-label" for="customSwitch<%= i+1 %>">
+                            <%= `${students[i].firstName} ${students[i].lastName}` %>
+                        </label>
+                    </div>
+                <% } %>
+
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-user">Enviar &rarr;</button>
+            </form>
+        </div>
+    </div>
+</div>
+<%- include ('../partials/footer') -%>
+<%- include ('../partials/modal') -%>
+<%- include ('../partials/scripts') -%>

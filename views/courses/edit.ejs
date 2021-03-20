@@ -21,6 +21,7 @@
                                     El nombre no es válido
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label for="validationCustom02">Descripción</label>
                                 <textarea class="form-control form-control-user" id="validationCustom02"
@@ -33,11 +34,46 @@
                                     La descripción no es válida
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label for="validationCustom03">Profesor</label>
+
+                                <select class="custom-select form-control form-control-user" id="validationCustom03" name="instructor">
+                                    <% if (course.instructor) { %>
+
+                                        <% for (let i=0; i < instructor.length; i++) { %>
+                                        
+                                            <% if (course.instructor.equals(instructor[i]._id)) { %>
+                                                <option value="<%= course.instructor %>" selected><%= `${instructor[i].firstName} ${instructor[i].lastName}` %></option>
+
+                                                <% continue; %>
+                                            <% } %>
+                                        
+                                            <option value="<%= instructor[i]._id %>">
+                                                <%= `${instructor[i].firstName} ${instructor[i].lastName}` %>
+                                            </option>
+                                        <% } %>
+                                        <option value="">No asignar aún</option>
+
+                                    <% } else { %>
+
+                                        <option value="" selected>No asignar aún</option>
+                                        <% for (let i=0; i < instructor.length; i++) { %>
+
+                                            <option value="<%= instructor[i]._id %>">
+                                                <%= `${instructor[i].firstName} ${instructor[i].lastName}` %>
+                                            </option>
+
+                                        <% } %>
+                                    <% } %>
+                                </select>
+                            </div>
+
                             <button type="submit" class="btn btn-primary btn-user">Enviar &rarr;</button>
                         </form>
                     </div>
                 </div>
             </div>
-            <%- include ('../partials/footer') -%>
-                <%- include ('../partials/modal') -%>
-                    <%- include ('../partials/scripts') -%>
+<%- include ('../partials/footer') -%>
+<%- include ('../partials/modal') -%>
+<%- include ('../partials/scripts') -%>

@@ -8,17 +8,16 @@ const passport = require('passport');
 const { isLoggedIn, /*isLoggedOut,*/ validateUser } = require('../middleware/middleware');
 
 
-//** ROUTES
 router.route('/register')
-    .get(/*isLoggedOut,*/users.new)
-    .post(/*isLoggedOut,*/ validateUser, users.create);
+    .get(/*isLoggedOut,*/users.renderRegisterForm)
+    .post(/*isLoggedOut,*/validateUser, users.register);
 
 router.route('/login')
-    .get(/*isLoggedOut,*/users.login)
-    .post(/*isLoggedOut,*/ passport.authenticate('local', {
+    .get(/*isLoggedOut,*/users.renderLoginForm)
+    .post(/*isLoggedOut,*/passport.authenticate('local', {
         failureRedirect: '/login',
-        failureFlash: true
-    }), users.authenticate);
+        failureFlash: { type: 'error', message: 'Usuario o contraseña incorrectos' }
+    }), users.login);
 
 router.get('/logout', isLoggedIn, users.logout);
 

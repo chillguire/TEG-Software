@@ -6,7 +6,7 @@ const removeMD = require('remove-markdown');
 const sanitizeHtml = require('sanitize-html');
 
 
-module.exports.new = (req, res) => {
+module.exports.renderNewForm = (req, res) => {
     if (req.session.lesson) {
         const lesson = req.session.lesson;
         console.log(req.session.lesson);
@@ -45,11 +45,11 @@ module.exports.create = async (req, res, next) => {
     }
 }
 
-module.exports.show = (req, res) => {
-    res.render('lessons/show', { lesson: res.locals.lesson });
+module.exports.renderSpecific = (req, res) => {
+    res.render('lessons/show', { course: res.locals.course, lesson: res.locals.lesson });
 }
 
-module.exports.edit = (req, res) => {
+module.exports.renderEditForm = (req, res) => {
     if (req.session.lesson) {
         res.locals.lesson.name = req.session.lesson.name;
         res.locals.lesson.OGdescription = req.session.lesson.description;

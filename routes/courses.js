@@ -3,22 +3,25 @@ const router = express.Router();
 
 const courses = require('../controller/courses');
 
-const { isLoggedIn, doesCourseExists, validateCourse } = require('../middleware/middleware');
+const { isLoggedIn, isAdmin, doesCourseExists, belongsToCourse, availableInstructors, availableStudents, validateCourse } = require('../middleware/middleware');
 
 
-//** ROUTES
 router.route('/')
-    .get(isLoggedIn, courses.index)
-    .post(isLoggedIn, validateCourse, courses.create);
+    .get(isLoggedIn, courses.renderAll)
+    .post(isLoggedIn, isAdmin, validateCourse, courses.create);
 
-router.get('/new', isLoggedIn, courses.new);
+router.get('/new', isLoggedIn, isAdmin, availableInstructors, courses.renderNewForm);
 
 router.route('/:id')
-    .get(isLoggedIn, doesCourseExists, courses.show)
-    .put(isLoggedIn, doesCourseExists, validateCourse, courses.update)
-    .delete(isLoggedIn, doesCourseExists, courses.delete);
+    .get(isLoggedIn, doesCourseExists, belongsToCourse, courses.renderSpecific)
+    .put(isLoggedIn, isAdmin, doesCourseExists, validateCourse, courses.update)
+    .delete(isLoggedIn, isAdmin, doesCourseExists, courses.delete);
 
-router.get('/:id/edit', isLoggedIn, doesCourseExists, courses.edit);
+router.get('/:id/edit', isLoggedIn, isAdmin, doesCourseExists, availableInstructors, courses.renderEditForm);
+
+router.route('/:id/students')
+    .get(isLoggedIn, isAdmin, doesCourseExists, availableStudents, courses.renderStudentsForm)
+    .put(isLoggedIn, isAdmin, doesCourseExists, /*validateStudents,*/ courses.updateStudents);
 
 
 module.exports = router;

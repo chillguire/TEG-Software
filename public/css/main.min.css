@@ -413,6 +413,9 @@ textarea {
     resize: none;
     overflow-y: hidden;
 }
+.custom-select{
+    height: 4.5rem !important;
+}
 pre{
     color:#c5c5c5;
 }

@@ -1,42 +1,58 @@
 <%- include ('../partials/head') -%>
-    <%- include ('../partials/sidebar') -%>
-        <%- include ('../partials/topbar') -%>
-            <div class="container">
-                <div class="row justify-content-lg-center">
-                    <div class="col col-lg-8">
+<%- include ('../partials/sidebar') -%>
+<%- include ('../partials/topbar') -%>
 
-                        <h3>Crear curso</h3>
+<div class="container">
+    <div class="row justify-content-lg-center">
+        <div class="col col-lg-8">
 
-                        <form class="user needs-validation" action="/courses" method="post" novalidate>
-                            <div class="form-group">
-                                <label for="validationCustom01">Nombre</label>
-                                <input type="text" class="form-control form-control-user" id="validationCustom01"
-                                    placeholder="Nombre" name="name" value="<%= course.name %>" required>
-                                <div class="valid-feedback">
-                                    ¡No hay errores!
-                                </div>
-                                <div class="invalid-feedback">
-                                    El nombre no es válido
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="validationCustom02">Descripción</label>
-                                <textarea class="form-control form-control-user" id="validationCustom02"
-                                    placeholder="Descripción" name="description"
-                                    required><%= course.description %></textarea>
-                                <div class="valid-feedback">
-                                    ¡No hay errores!
-                                </div>
-                                <div class="invalid-feedback">
-                                    La descripción no es válida
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-user">Enviar &rarr;</button>
-                        </form>
+            <h3>Crear curso</h3>
+
+            <form class="user needs-validation" action="/courses" method="post" novalidate>
+                <div class="form-group">
+                    <label for="validationCustom01">Nombre</label>
+                    <input type="text" class="form-control form-control-user" id="validationCustom01"
+                        placeholder="Nombre" name="name" value="<%= course.name %>" required>
+                    <div class="valid-feedback">
+                        ¡No hay errores!
+                    </div>
+                    <div class="invalid-feedback">
+                        El nombre no es válido
                     </div>
                 </div>
-            </div>
 
-            <%- include ('../partials/footer') -%>
-                <%- include ('../partials/modal') -%>
-                    <%- include ('../partials/scripts') -%>
+                <div class="form-group">
+                    <label for="validationCustom02">Descripción</label>
+                    <textarea class="form-control form-control-user" id="validationCustom02"
+                        placeholder="Descripción" name="description"
+                        required><%= course.description %></textarea>
+                    <div class="valid-feedback">
+                        ¡No hay errores!
+                    </div>
+                    <div class="invalid-feedback">
+                        La descripción no es válida
+                    </div>
+                </div>
+  
+                <div class="form-group">
+                    <label for="validationCustom03">Profesor</label>
+
+                    <select class="custom-select form-control form-control-user" id="validationCustom03" name="instructor">
+                        <option value="" selected>No asignar aún</option>
+                        <% for (let i=0; i < instructor.length; i++) { %>
+                            <option value="<%= instructor[i]._id %>">
+                                <%= `${instructor[i].firstName} ${instructor[i].lastName}` %>
+                            </option>
+                        <% } %>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-user my-2">Enviar &rarr;</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include ('../partials/footer') -%>
+<%- include ('../partials/modal') -%>
+<%- include ('../partials/scripts') -%>

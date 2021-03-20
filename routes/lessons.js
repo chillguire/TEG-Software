@@ -3,20 +3,20 @@ const router = express.Router({ mergeParams: true });
 
 const lessons = require('../controller/lessons');
 
-const { isLoggedIn, doesCourseExists, doesLessonExists, validateLesson } = require('../middleware/middleware');
+const { isLoggedIn, isInstructor, doesCourseExists, belongsToCourse, doesLessonExists, validateLesson } = require('../middleware/middleware');
 
 
-//** ROUTES
 router.route('/')
-    .post(isLoggedIn, doesCourseExists, validateLesson, lessons.create);
+    .post(isLoggedIn, isInstructor, doesCourseExists, belongsToCourse, validateLesson, lessons.create);
 
-router.get('/new', isLoggedIn, doesCourseExists, lessons.new);
+router.get('/new', isLoggedIn, isInstructor, doesCourseExists, belongsToCourse, lessons.renderNewForm);
 
 router.route('/:lessonID')
-    .get(isLoggedIn, doesCourseExists, doesLessonExists, lessons.show)
-    .put(isLoggedIn, doesCourseExists, doesLessonExists, validateLesson, lessons.update)
-    .delete(isLoggedIn, doesCourseExists, doesLessonExists, lessons.delete);
+    .get(isLoggedIn, doesCourseExists, belongsToCourse, doesLessonExists, lessons.renderSpecific)
+    .put(isLoggedIn, isInstructor, doesCourseExists, belongsToCourse, doesLessonExists, validateLesson, lessons.update)
+    .delete(isLoggedIn, isInstructor, doesCourseExists, belongsToCourse, doesLessonExists, lessons.delete);
 
-router.get('/:lessonID/edit', isLoggedIn, doesCourseExists, doesLessonExists, lessons.edit);
+router.get('/:lessonID/edit', isLoggedIn, isInstructor, doesCourseExists, belongsToCourse, doesLessonExists, lessons.renderEditForm);
+
 
 module.exports = router;

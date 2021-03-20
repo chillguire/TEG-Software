@@ -3,11 +3,10 @@ const router = express.Router();
 
 const rooms = require('../controller/rooms');
 
-const { isLoggedIn, doesCourseExists } = require('../middleware/middleware');
+const { isLoggedIn, doesCourseExists, belongsToCourse } = require('../middleware/middleware');
 
 
-//** ROUTES
-router.get('/:id/:room', isLoggedIn, doesCourseExists, rooms.joinRoom);
+router.get('/:id/:room', isLoggedIn, doesCourseExists, belongsToCourse, rooms.joinRoom);
 
 
 module.exports = router;

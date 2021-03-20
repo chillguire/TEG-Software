@@ -3,7 +3,7 @@ const User = require('../models/user');
 const sanitizeHtml = require('sanitize-html');
 
 
-module.exports.new = (req, res) => {
+module.exports.renderRegisterForm = (req, res) => {
     if (req.session.user) {
         const user = req.session.user;
         req.session.user = null;
@@ -18,7 +18,7 @@ module.exports.new = (req, res) => {
     }
 }
 
-module.exports.create = async (req, res, next) => {
+module.exports.register = async (req, res, next) => {
     try {
         const newUser = {
             firstName: sanitizeHtml(req.body.firstName, {
@@ -47,20 +47,20 @@ module.exports.create = async (req, res, next) => {
             if (err) {
                 return next(err);
             }
-
             req.flash('success', '¡Bienvenido! Te has registrado exitosamente');
             res.redirect('/courses');
         });
     } catch (error) {
+        req.flash('error', error.message);
         res.redirect('/register');
     }
 }
 
-module.exports.login = (req, res) => {
+module.exports.renderLoginForm = (req, res) => {
     res.render('users/login');
 }
 
-module.exports.authenticate = (req, res, next) => {
+module.exports.login = (req, res, next) => {
     req.flash('success', '¡Bienvenido de nuevo! ');
     res.redirect('/courses');
 }
