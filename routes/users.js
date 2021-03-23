@@ -5,7 +5,7 @@ const users = require('../controller/users');
 
 const passport = require('passport');
 
-const { isLoggedIn, /*isLoggedOut,*/ validateUser } = require('../middleware/middleware');
+const { isLoggedIn, /*isLoggedOut,*/ isAdmin, isUUIDvalid, validateUser } = require('../middleware/middleware');
 
 
 router.route('/register')
@@ -18,6 +18,18 @@ router.route('/login')
         failureRedirect: '/login',
         failureFlash: { type: 'error', message: 'Usuario o contraseña incorrectos' }
     }), users.login);
+
+router.route('/forgot-password')
+    .get(users.renderForgotPasswordForm)
+    .post(users.forgotPassword);
+
+router.route('/reset/:uuid')
+    .get(isUUIDvalid, users.renderResetPasswordForm)
+    .put(isUUIDvalid, users.resetPassword);
+
+router.route('/users/invite')
+    .get(isLoggedIn, isAdmin, users.renderInviteForm)
+    .post(isLoggedIn, isAdmin, users.inviteUsers);
 
 router.get('/logout', isLoggedIn, users.logout);
 

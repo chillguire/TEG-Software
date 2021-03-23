@@ -72,7 +72,7 @@ module.exports.create = async (req, res, next) => {
         req.flash('success', 'Curso creado exitosamente');
         res.redirect(`/courses/${course._id}`);
     } catch (error) {
-        // req.flash('error', error._details);
+        req.flash('error', error.message);
         res.redirect(`/courses/new`);
     }
 }
@@ -81,7 +81,7 @@ module.exports.renderSpecific = async (req, res) => {
     const course = await res.locals.course
         .populate({
             path: 'lessons',
-            options: { sort: { createdAt: 'asc' } }
+            options: { sort: { createdAt: 'desc' } }
         })
         .populate({
             path: 'instructor',
@@ -142,7 +142,7 @@ module.exports.update = async (req, res) => {
         req.flash('success', 'Curso actualizado exitosamente');
         res.redirect(`/courses/${res.locals.course._id}`);
     } catch (error) {
-        // req.flash('error', error._details);
+        req.flash('error', error.message);
         res.redirect(`/courses/${res.locals.course._id}/edit`);
     }
 }
@@ -180,7 +180,7 @@ module.exports.updateStudents = async (req, res, next) => {
         req.flash('success', 'Estudiantes actualizados exitosamente');
         res.redirect(`/courses/${res.locals.course._id}`);
     } catch (error) {
-        // req.flash('error', error._details);
+        req.flash('error', error.message);
         res.redirect(`/courses/${res.locals.course._id}`);
     }
 }

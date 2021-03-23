@@ -1,33 +1,42 @@
 <%- include ('../partials/head') -%>
-    <%- include ('../partials/sidebar') -%>
-        <%- include ('../partials/topbar') -%>
+<%- include ('../partials/sidebar') -%>
+<%- include ('../partials/topbar') -%>
 
-            <% if (currentUser.type==='Admin' ) { %>
-                <div class="row mx-2 mb-4">
-                    <a href="/courses/new" class="btn btn-outline-primary">Añadir</a>
+<% if (currentUser.type==='Admin' ) { %>
+<div class="row mx-2 mb-4">
+    <a href="/courses/new" class="btn btn-outline-primary mr-2">Añadir</a>
+    <a href="/users/invite" class="btn btn-outline-light">Invitar usuarios</a>
+</div>
+<% } %>
+
+
+
+<% if (!courses.length) { %>
+    Aún no hay cursos que te correspondan. Contacta al administrador para ser asignado en cursos
+<% } else { %>
+    <div class="row">
+    <% for (let i=0; i < courses.length; i++) { %>
+        <div class="col col-lg-4">
+            <div class="card shadow mx-2 mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <%= courses[i].name %>
+                    </h6>
                 </div>
-                <% } %>
-                    <div class="row">
+                <div class="card-body">
+                    <p class="card-text text-truncate">
+                        <%= courses[i].description %>
+                    </p>
+                    <a href="/courses/<%= courses[i].id %>" class="btn btn-primary">Ver curso</a>
+                </div>
+            </div>
+        </div>
+    <% } %>
+    </div>
+<% } %>
 
-                        <% for (let i=0; i < courses.length; i++) { %>
-                            <div class="col col-lg-4">
-                                <div class="card shadow mx-2 mb-4">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">
-                                            <%= courses[i].name %>
-                                        </h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="card-text text-truncate">
-                                            <%= courses[i].description %>
-                                        </p>
-                                        <a href="/courses/<%= courses[i].id %>" class="btn btn-primary">Ver curso</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <% } %>
 
-                    </div>
-                    <%- include ('../partials/footer') -%>
-                        <%- include ('../partials/modal') -%>
-                            <%- include ('../partials/scripts') -%>
+
+<%- include ('../partials/footer') -%>
+<%- include ('../partials/modal') -%>
+<%- include ('../partials/scripts') -%>

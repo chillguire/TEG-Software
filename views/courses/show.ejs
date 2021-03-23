@@ -42,26 +42,30 @@
                 Lecciones
             </h2>
 
-            <% for( let i=0; i < course.lessons.length; i++ ) { %>
-                <!-- Lesson -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h3 class="card-title">
-                            <%= course.lessons[i].name %>
-                        </h3>
-                        <p class="card-text text-truncate">
-                            <%= course.lessons[i].descriptionMD %>
-                        </p>
-                        <a href="/courses/<%= course._id %>/lessons/<%= course.lessons[i]._id %>"
-                            class="btn btn-primary mr-2">Leer más
-                            &rarr;</a>
+            <% if (!course.lessons.length) { %>
+                <p>Aún no se han añadido lecciones</p>
+            <% } else { %>
+                <% for( let i=0; i < course.lessons.length; i++ ) { %>
+                    <!-- Lesson -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                <%= course.lessons[i].name %>
+                            </h3>
+                            <p class="card-text text-truncate">
+                                <%= course.lessons[i].descriptionMD %>
+                            </p>
+                            <a href="/courses/<%= course._id %>/lessons/<%= course.lessons[i]._id %>"
+                                class="btn btn-primary mr-2">Leer más
+                                &rarr;</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Publicado el <%=
+                                course.lessons[i].createdAt.toLocaleDateString('es-ES') %>
+                        </div>
                     </div>
-                    <div class="card-footer text-muted">
-                        Publicado el <%=
-                            course.lessons[i].createdAt.toLocaleDateString('es-ES') %>
-                    </div>
-                </div>
-                <!-- Lesson -->
+                    <!-- Lesson -->
+                <% } %>
             <% } %>
             <hr>
 
@@ -74,7 +78,12 @@
 
                 <div class="card-body">
                 <% if (course.instructor) { %>
-                    <%= `${course.instructor.firstName} ${course.instructor.lastName}` %>
+                    <div class="row align-items-center">
+                        <div class="col text-center">
+                            <img class="mb-1 course-teacher-img rounded-circle" src="http://placehold.it/200">
+                            <%= `${course.instructor.firstName} ${course.instructor.lastName}` %>
+                        </div>
+                    </div>
                 <% } else if (currentUser.type==='Admin' ) { %>
                     <a class="btn btn-primary btn-block" href="/courses/<%= course._id %>/edit">Añadir profesor</a>
                 <% } else { %>
@@ -89,7 +98,11 @@
                 <div class="card-body">
                 <% if (course.students.length) { %>
                     <% for( let i=0; i < course.students.length; i++ ) { %>
-                        <%= course.students[i].firstName %>
+                    <div class="row mb-1">
+                        <div class="col">
+                            <img class="course-students-img rounded-circle" src="http://placehold.it/200"> <%= course.students[i].firstName %> <%= course.students[i].lastName %>
+                        </div>
+                    </div>
                     <% } %>
                 <% } else { %>
                     Aún no hay estudiantes asignados

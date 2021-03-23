@@ -41,6 +41,7 @@ module.exports.create = async (req, res, next) => {
         req.flash('success', 'Leccion creada exitosamente');
         res.redirect(`/courses/${course._id}/lessons/${lesson._id}`);
     } catch (error) {
+        req.flash('error', error.message);
         res.redirect(`/courses/${course._id}/lessons/new`);
     }
 }
@@ -74,6 +75,7 @@ module.exports.update = async (req, res) => {
         req.flash('success', 'Lección actualizada exitosamente');
         res.redirect(`/courses/${res.locals.course._id}/lessons/${res.locals.lesson._id}`);
     } catch (error) {
+        req.flash('error', error.message);
         res.redirect(`/courses/${res.locals.course._id}/lessons/${res.locals.lesson._id}/edit`);
     }
 }

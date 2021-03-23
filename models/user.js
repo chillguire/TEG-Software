@@ -27,6 +27,14 @@ const userSchema = new Schema({
         enum: ['Admin', 'Instructor', 'Student'],
         default: 'Student',
     },
+    resetPasswordURL: {
+        type: String,
+        unique: true,
+        sparse: true,
+    },
+    resetPasswordExpires: {
+        type: Date,
+    },
 });
 
 const options = {

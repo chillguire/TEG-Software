@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
@@ -7,10 +9,13 @@ const mongoose = require('mongoose');
 const User = require('./models/user');
 
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+
+const nodemailer = require('nodemailer');
 
 const io = require('socket.io')(http);
 const { ExpressPeerServer } = require('peer');
@@ -26,7 +31,9 @@ const helmet = require('helmet');
 
 
 //** DB CONFIG
-mongoose.connect('mongodb://localhost/LMS', {
+const dbURL = process.env.DB_URL || 'mongodb://localhost/LMS';
+
+mongoose.connect(dbURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -38,6 +45,24 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
     console.log('DB connected');
 });
+
+//** MAIL CONFIG
+
+const mailAccount = process.env.MAIL_ACCOUNT || 'juandelacruz198912@gmail.com';
+const mailAccountPass = process.env.MAIL_ACCOUNT_PASS || 'eMJuLbY5ZEfEAFu';
+
+const smtpTransport = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: mailAccount,
+        pass: mailAccountPass,
+    }
+});
+
+module.exports = {
+    smtpTransport: smtpTransport
+};
+
 
 //** APP CONFIG
 //? general
@@ -57,9 +82,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 //? sessions
 app.use(flash());
 
+const sessionSecret = process.env.SESSION_SECRET || 'Chavez no puede ver esto porqué está MUERTO';
+
+const store = MongoStore.create({
+    mongoUrl: dbURL,
+    secret: sessionSecret,
+    touchAfter: 24 * 60 * 60,
+});
+
+store.on('error', function (error) {
+    console.log(error);
+});
+
 const sessionConfig = {
     name: 'SessionLMS',
-    secret: 'Chavez no puede ver esto porqué está MUERTO',
+    secret: sessionSecret,
+    store: store,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -107,6 +145,7 @@ const lessons = require('./routes/lessons');
 app.use('/courses/:id/lessons', lessons);
 
 const userRoutes = require('./routes/users');
+const { required } = require('joi');
 app.use(userRoutes);
 
 app.all('*', isLoggedIn, (req, res, next) => {
@@ -136,6 +175,7 @@ io.on('connection', (socket) => {
 
 //** APP.LISTEN
 const port = process.env.PORT || 3000;
+
 http.listen(port, () => {
     console.log(`Running: ${port}`);
 });

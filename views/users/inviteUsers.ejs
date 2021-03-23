@@ -1,0 +1,55 @@
+<%- include ('../partials/head') -%>
+<%- include ('../partials/sidebar') -%>
+<%- include ('../partials/topbar') -%>
+<div class="container">
+    <div class="row justify-content-lg-center">
+        <div class="col col-lg-8">
+
+            <h3>Invitar usuario</h3>
+
+            <form action="/users/invite" method="post" class="user needs-validation" novalidate>
+
+                <div class="form-group row">
+                    <div class="col-sm-8">
+                        <label for="validationCustom01">E-mail</label>
+                        <input type="email" name="email"
+                            class="form-control form-control-user select-height" id="validationCustom01"
+                            aria-describedby="email" placeholder="E-mail" required>
+                        <div class="valid-feedback">
+                            ¡No hay errores!
+                        </div>
+                        <div class="invalid-feedback">
+                            El e-mail no es válido
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="validationCustom02">Rol</label>
+
+                        <select class="custom-select form-control form-control-user" id="validationCustom02" name="rol" required>
+                            <option selected disabled>Seleccionar rol</option>
+                            <option value="Admin">Administrador</option>
+                            <option value="Instructor">Profesor</option>
+                            <option value="Student">Estudiante</option>
+                        </select>
+                        <div class="valid-feedback">
+                            ¡No hay errores!
+                        </div>
+                        <div class="invalid-feedback">
+                            El rol no es válido
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- <button type="button" class="my-3 btn btn-light btn-user">&plus;</button> -->
+
+                <button class="btn btn-primary btn-user" type="submit">Invitar usuarios</button>
+            
+            </form>
+        </div>
+    </div>
+</div>
+<%- include ('../partials/footer') -%>
+<%- include ('../partials/modal') -%>
+<%- include ('../partials/scripts') -%>

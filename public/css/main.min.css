@@ -416,13 +416,23 @@ textarea {
 .custom-select{
     height: 4.5rem !important;
 }
+.select-height{
+    height: 4.5rem !important;
+}
 pre{
     color:#c5c5c5;
 }
 .description{
     word-wrap: break-word;
 }
-
+.course-teacher-img{
+    width: 50%;
+    display: block;
+    margin:auto;
+}
+.course-students-img{
+    width: 2.5rem;
+}
 
 
 /******************/

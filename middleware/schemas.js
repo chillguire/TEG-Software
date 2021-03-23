@@ -47,7 +47,6 @@ module.exports.userSchema = Joi.object({
             'any.required': `"Apellido" es un campo requerido`,
         }),
     email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: true } })
         .required()
         .messages({
             'string.empty': `"E-mail" no puede estar vacío`,

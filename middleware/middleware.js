@@ -25,6 +25,14 @@ module.exports.doesLessonExists = async function (req, res, next) {
     res.locals.lesson = lesson;
     next();
 }
+module.exports.isUUIDvalid = async function (req, res, next) {
+    const uuid = await User.findOne({ resetPasswordURL: req.params.uuid, resetPasswordExpires: { $gt: Date.now() } });
+    if (!uuid) {
+        return res.redirect('/login');
+    }
+    res.locals.uuid = uuid;
+    next();
+}
 
 // check if user is logged in
 module.exports.isLoggedIn = function (req, res, next) {
