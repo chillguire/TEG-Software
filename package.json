@@ -12,6 +12,7 @@
   "dependencies": {
     "connect-flash": "^0.1.1",
     "connect-mongo": "^4.4.1",
+    "dotenv": "^8.2.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-mongo-sanitize": "^2.0.2",
@@ -32,8 +33,5 @@
     "sanitize-html": "^2.3.2",
     "socket.io": "^3.1.2",
     "uuid": "^8.3.2"
-  },
-  "devDependencies": {
-    "dotenv": "^8.2.0"
   }
 }
