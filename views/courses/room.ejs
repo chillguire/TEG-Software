@@ -55,10 +55,11 @@
         </div>
     </div>
 
+
+<%- include ('../partials/scripts') -%>
+<script>
+    const ROOM_ID = "<%= roomID %>"
+</script>
 <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js" defer></script>
 <script src="/socket.io/socket.io.js" defer></script>
 <script src="/js/room.js" defer></script>
-<script defer>
-    const ROOM_ID = "<%= roomID %>"
-</script>
-<%- include ('../partials/scripts') -%>
