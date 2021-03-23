@@ -103,7 +103,7 @@ module.exports.forgotPassword = async (req, res) => {
             to: user.email,
             from: `Sistema de Gestión Académica a Distancia ${process.env.MAIL_ACCOUNT}`,
             subject: `Solicitud de restablecimiento de contraseña`,
-            text: `Hola ${user.firstName} ${user.lastName}, solicitaste restablecer tu contraseña en nuestra aplicación, para hacerlo, ve al siguiente link para completar el proceso. \n\nhttp://${req.headers.host}/reset/${user.resetPasswordURL}\n\nSi no fuiste tú quién pidió restablecer la contraseña, no te preocupes, ignora este correo y tu contraseña no será cambiada.`,
+            text: `Hola ${user.firstName} ${user.lastName}, solicitaste restablecer tu contraseña en nuestra aplicación, para hacerlo, ve al siguiente link para completar el proceso. \n\nhttps://${req.headers.host}/reset/${user.resetPasswordURL}\n\nSi no fuiste tú quién pidió restablecer la contraseña, no te preocupes, ignora este correo y tu contraseña no será cambiada.`,
         });
 
         req.flash('success', `Un correo fue enviado a ${user.email} con los siguientes pasos`);
@@ -179,7 +179,7 @@ module.exports.inviteUsers = async (req, res) => {
             from: `Sistema de Gestión Académica a Distancia ${process.env.MAIL_ACCOUNT}`,
             subject: `Invitado al sistema de gestión académica a distancia`,
             // cambiar invitedUser.type to its translation in spanish
-            text: `Hola, este es un correo para informarle de que ha sido invitado al sistema de gestión académica a distancia como ${invitedUser.type}. Para ingresar ve al siguiente link para iniciar el proceso de registro.\n\nhttp://${req.headers.host}/register`,
+            text: `Hola, este es un correo para informarle de que ha sido invitado al sistema de gestión académica a distancia como ${invitedUser.type}. Para ingresar ve al siguiente link para iniciar el proceso de registro.\n\nhttps://${req.headers.host}/register`,
         });
 
         req.flash('success', 'Usuario invitado exitosamente');
