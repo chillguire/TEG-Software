@@ -5,6 +5,10 @@ const User = require('../models/user');
 
 const { courseSchema, lessonSchema, userSchema } = require('./schemas');
 
+const nodemailer = require('nodemailer');
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
+
 
 // check if lesson/course exists (or if param is a valid mongo object)
 module.exports.doesCourseExists = async function (req, res, next) {
@@ -139,3 +143,43 @@ module.exports.validateUser = function (req, res, next) {
     }
     next();
 }
+
+// send mails
+const createSmtpTransport = async () => {
+    const oauth2Client = new OAuth2(
+        process.env.CLIENT_ID,
+        process.env.CLIENT_SECRET,
+        "https://developers.google.com/oauthplayground"
+    );
+
+    oauth2Client.setCredentials({
+        refresh_token: process.env.REFRESH_TOKEN
+    });
+
+    const accessToken = await new Promise((resolve, reject) => {
+        oauth2Client.getAccessToken((error, token) => {
+            if (error) {
+                reject("Failed to create access token");
+            }
+            resolve(token);
+        });
+    });
+
+    const smtpTransport = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            type: 'OAuth2',
+            user: process.env.MAIL_ACCOUNT,
+            accessToken: accessToken,
+            clientId: process.env.CLIENT_ID,
+            clientSecret: process.env.CLIENT_SECRET,
+            refreshToken: process.env.REFRESH_TOKEN,
+        }
+    });
+
+    return smtpTransport;
+};
+module.exports.sendEmail = async (emailOptions) => {
+    let emailTransporter = await createSmtpTransport();
+    await emailTransporter.sendMail(emailOptions);
+};

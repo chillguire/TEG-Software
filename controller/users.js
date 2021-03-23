@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const InvitedUser = require('../models/invitedUser');
 
-const { smtpTransport } = require('../server');
+const { sendEmail } = require('../middleware/middleware');
 
 const { v4: uuidV4 } = require('uuid');
 
@@ -99,13 +99,12 @@ module.exports.forgotPassword = async (req, res) => {
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour from now
         await user.save();
 
-        const mailOptions = {
+        sendEmail({
             to: user.email,
-            from: 'Sistema de Gestión Académica a Distancia <juandelacruz198912@gmail.com>',
+            from: `Sistema de Gestión Académica a Distancia ${process.env.MAIL_ACCOUNT}`,
             subject: `Solicitud de restablecimiento de contraseña`,
             text: `Hola ${user.firstName} ${user.lastName}, solicitaste restablecer tu contraseña en nuestra aplicación, para hacerlo, ve al siguiente link para completar el proceso. \n\nhttp://${req.headers.host}/reset/${user.resetPasswordURL}\n\nSi no fuiste tú quién pidió restablecer la contraseña, no te preocupes, ignora este correo y tu contraseña no será cambiada.`,
-        };
-        smtpTransport.sendMail(mailOptions);
+        });
 
         req.flash('success', `Un correo fue enviado a ${user.email} con los siguientes pasos`);
         return res.redirect('/login');
@@ -128,13 +127,12 @@ module.exports.resetPassword = async (req, res) => {
         user.resetPasswordExpires = undefined;
         await user.save();
 
-        const mailOptions = {
+        sendEmail({
             to: user.email,
-            from: 'Sistema de Gestión Académica a Distancia <juandelacruz198912@gmail.com>',
+            from: `Sistema de Gestión Académica a Distancia ${process.env.MAIL_ACCOUNT}`,
             subject: `Contraseña cambiada`,
             text: `Hola ${user.firstName} ${user.lastName}, esto es una confirmación de que tu contraseña para la cuenta con el correo ${user.email} acaba de ser cambiada.`,
-        };
-        smtpTransport.sendMail(mailOptions);
+        });
 
         req.login(user, err => {
             if (err) {
@@ -176,14 +174,13 @@ module.exports.inviteUsers = async (req, res) => {
         const invitedUser = new InvitedUser(newInvitedUser)
         await invitedUser.save();
 
-        const mailOptions = {
+        sendEmail({
             to: invitedUser.email,
-            from: 'Sistema de Gestión Académica a Distancia <juandelacruz198912@gmail.com>',
+            from: `Sistema de Gestión Académica a Distancia ${process.env.MAIL_ACCOUNT}`,
             subject: `Invitado al sistema de gestión académica a distancia`,
             // cambiar invitedUser.type to its translation in spanish
             text: `Hola, este es un correo para informarle de que ha sido invitado al sistema de gestión académica a distancia como ${invitedUser.type}. Para ingresar ve al siguiente link para iniciar el proceso de registro.\n\nhttp://${req.headers.host}/register`,
-        };
-        smtpTransport.sendMail(mailOptions);
+        });
 
         req.flash('success', 'Usuario invitado exitosamente');
         res.redirect(`/courses`);

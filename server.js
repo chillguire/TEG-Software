@@ -15,8 +15,6 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
-const nodemailer = require('nodemailer');
-
 const io = require('socket.io')(http);
 const { ExpressPeerServer } = require('peer');
 const peerServer = ExpressPeerServer(http, {
@@ -46,24 +44,6 @@ db.once('open', function () {
     console.log('DB connected');
 });
 
-//** MAIL CONFIG
-
-const mailAccount = process.env.MAIL_ACCOUNT || 'juandelacruz198912@gmail.com';
-const mailAccountPass = process.env.MAIL_ACCOUNT_PASS || 'eMJuLbY5ZEfEAFu';
-
-const smtpTransport = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: mailAccount,
-        pass: mailAccountPass,
-    }
-});
-
-module.exports = {
-    smtpTransport: smtpTransport
-};
-
-
 //** APP CONFIG
 //? general
 app.use(express.urlencoded({ extended: true, }));
@@ -82,7 +62,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //? sessions
 app.use(flash());
 
-const sessionSecret = process.env.SESSION_SECRET || 'Chavez no puede ver esto porqué está MUERTO';
+const sessionSecret = process.env.SESSION_SECRET;
 
 const store = MongoStore.create({
     mongoUrl: dbURL,
