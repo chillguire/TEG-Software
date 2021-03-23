@@ -7,6 +7,6 @@ module.exports.joinRoom = async (req, res) => {
         req.flash('error', 'La sala no existe');
         return res.redirect(`/courses/${req.params.id}`);
     }
-    console.log(room);
-    res.render('courses/room', { roomID: room, course: res.locals.course });
+    console.log(room.roomID);
+    res.render('courses/room', { roomID: room.roomID, course: res.locals.course });
 }
