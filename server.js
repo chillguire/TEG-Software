@@ -29,8 +29,7 @@ const helmet = require('helmet');
 
 
 //** DB CONFIG
-const dbURL = process.env.DB_URL || 'mongodb://localhost/LMS';
-
+const dbURL = process.env.DB_URL;
 mongoose.connect(dbURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -63,7 +62,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(flash());
 
 const sessionSecret = process.env.SESSION_SECRET;
-
 const store = MongoStore.create({
     mongoUrl: dbURL,
     secret: sessionSecret,
@@ -82,7 +80,8 @@ const sessionConfig = {
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
-        secure: true,
+        secure: false,
+        sameSite: 'Lax',
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // ms/s * s/m * m/h * h/d * d/w
         maxAge: 1000 * 60 * 60 * 24 * 7,
     }
@@ -125,7 +124,6 @@ const lessons = require('./routes/lessons');
 app.use('/courses/:id/lessons', lessons);
 
 const userRoutes = require('./routes/users');
-const { required } = require('joi');
 app.use(userRoutes);
 
 app.all('*', isLoggedIn, (req, res, next) => {
@@ -155,7 +153,6 @@ io.on('connection', (socket) => {
 
 //** APP.LISTEN
 const port = process.env.PORT || 3000;
-
 http.listen(port, () => {
     console.log(`Running: ${port}`);
 });

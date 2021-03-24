@@ -10,7 +10,7 @@ const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 
 
-// check if lesson/course exists (or if param is a valid mongo object)
+// check if x exists or is valid
 module.exports.doesCourseExists = async function (req, res, next) {
     let course;
     if (!isValidObjectId(req.params.id) || !(course = await Course.findById(req.params.id))) {
@@ -43,6 +43,13 @@ module.exports.isLoggedIn = function (req, res, next) {
     if (!req.isAuthenticated()) {
         req.flash('warning', 'Necesitas iniciar sesión para hacer eso');
         return res.redirect('/login');
+    }
+    next();
+}
+module.exports.isLoggedOut = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        req.flash('warning', 'Ya estás dentro del sistema');
+        return res.redirect('/courses');
     }
     next();
 }
