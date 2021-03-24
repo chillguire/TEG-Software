@@ -178,8 +178,12 @@ module.exports.inviteUsers = async (req, res) => {
             to: invitedUser.email,
             from: `Sistema de Gestión Académica a Distancia ${process.env.MAIL_ACCOUNT}`,
             subject: `Invitado al sistema de gestión académica a distancia`,
-            // cambiar invitedUser.type to its translation in spanish
-            text: `Hola, este es un correo para informarle de que ha sido invitado al sistema de gestión académica a distancia como ${invitedUser.type}. Para ingresar ve al siguiente link para iniciar el proceso de registro.\n\nhttps://${req.headers.host}/register`,
+            text: `Hola, este es un correo para informarle de que ha sido invitado al sistema de gestión académica a distancia como 
+            ${(invitedUser.type == 'Admin') ? 'administrador'
+                    : (invitedUser.type == 'Instructor') ? 'profesor'
+                        : 'estudiante'
+                }
+                . Para ingresar ve al siguiente link para iniciar el proceso de registro.\n\nhttps://${req.headers.host}/register`,
         });
 
         req.flash('success', 'Usuario invitado exitosamente');

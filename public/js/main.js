@@ -21,7 +21,7 @@
     this.style.height = (this.scrollHeight) + 'px';
   }
 
-  // Form validation
+  // form validation
   (function () {
     'use strict';
     window.addEventListener('load', function () {
