@@ -551,20 +551,3 @@ video {
     padding: 22px 12px;
     display: flex;
 }
-
-#chat_message {
-    flex-grow: 1;
-    background-color: grey;
-    border-radius: 5px;
-    border: none;
-    color: #F5F5F5;
-    height: 3rem;
-    padding: 5px;
-    border: 2.5px solid transparent;
-}
-
-#chat_message:focus {
-    border: 2.5px solid #2fa1db;
-    border-radius: 5px;
-    outline: none;
-}

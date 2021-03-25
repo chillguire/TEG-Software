@@ -48,6 +48,18 @@ navigator.mediaDevices.getUserMedia(constraints)
         //** CHAT
 
         const text = document.getElementById('chat_message');
+        const btn = document.getElementById('button-addon1');
+
+        btn.addEventListener('click', function (event) {
+            if (text.value.length !== 0) {
+                const message = {
+                    text: text.value,
+                    user: user,
+                }
+                socket.emit('message', message);
+                text.value = '';
+            }
+        })
 
         text.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && text.value.length !== 0) {
@@ -55,7 +67,6 @@ navigator.mediaDevices.getUserMedia(constraints)
                     text: text.value,
                     user: user,
                 }
-                console.log(message);
                 socket.emit('message', message);
                 text.value = '';
             }

@@ -44,7 +44,15 @@
                 </ul>
             </div>
             <div class="chat-type">
-                <input type="text" id="chat_message" placeholder="Escribe tu mensaje aquí...">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="chat_message" placeholder="Escribe tu mensaje..." aria-describedby="button-addon1">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" id="button-addon1">
+                            <i class="fab fa-telegram-plane fa-lg"></i>
+                        </button>    
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

@@ -16,6 +16,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
 const io = require('socket.io')(http);
+const sockets = require('./sockets')(io);
 const { ExpressPeerServer } = require('peer');
 const peerServer = ExpressPeerServer(http, {
     debug: true
@@ -130,26 +131,6 @@ app.all('*', isLoggedIn, (req, res, next) => {
     res.sendStatus(404);
 });
 
-//** WEBSOCKETS
-io.on('connection', (socket) => {
-    console.log('user connected uwu');
-
-    socket.on('join-room', (roomID, userID) => {
-
-        socket.join(roomID);
-
-        socket.to(roomID).broadcast.emit('user-connected', userID);
-
-        socket.on('message', (message) => {
-            console.log(message);
-            io.to(roomID).emit('create-message', message);
-        });
-
-        socket.on('disconnect', () => {
-            socket.to(roomID).broadcast.emit('user-disconnected', userID);
-        });
-    });
-});
 
 //** APP.LISTEN
 const port = process.env.PORT || 3000;
