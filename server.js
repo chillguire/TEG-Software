@@ -44,6 +44,7 @@ db.once('open', function () {
     console.log('DB connected');
 });
 
+
 //** APP CONFIG
 //? general
 app.use(express.urlencoded({ extended: true, }));
@@ -109,6 +110,7 @@ app.use((req, res, next) => {
 
 //? webRTC
 app.use('/peerjs', peerServer);
+
 
 //** ROUTES
 app.get('/', (req, res) => {
