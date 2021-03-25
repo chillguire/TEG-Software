@@ -141,7 +141,7 @@ io.on('connection', (socket) => {
         socket.to(roomID).broadcast.emit('user-connected', userID);
 
         socket.on('message', (message) => {
-
+            console.log(message);
             io.to(roomID).emit('create-message', message);
         });
 

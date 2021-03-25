@@ -51,13 +51,18 @@ navigator.mediaDevices.getUserMedia(constraints)
 
         text.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && text.value.length !== 0) {
-                socket.emit('message', text.value);
+                const message = {
+                    text: text.value,
+                    user: user,
+                }
+                console.log(message);
+                socket.emit('message', message);
                 text.value = '';
             }
         });
 
         socket.on('create-message', message => {
-            document.getElementById('messages').innerHTML += `<li class="message"><b class="username">User</b><br/>${message}</li><br/>`;
+            document.getElementById('messages').innerHTML += `<li class="message"><b class="username">${message.user}</b><br/>${message.text}</li><br/>`;
             scrollToBottom();
         });
 
