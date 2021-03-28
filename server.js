@@ -100,12 +100,19 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //? global variables
-app.use((req, res, next) => {
-    res.locals.currentUser = req.user;
-    res.locals.success = req.flash('success');
-    res.locals.warning = req.flash('warning');
-    res.locals.error = req.flash('error');
-    next();
+const Chat = require('./models/chat');
+app.use(async (req, res, next) => {
+    try {
+        res.locals.message = await Chat.findOne().sort({ createdAt: -1 });
+        res.locals.currentUser = req.user;
+        res.locals.success = req.flash('success');
+        res.locals.warning = req.flash('warning');
+        res.locals.error = req.flash('error');
+        next();
+    } catch (error) {
+        next(error);
+    }
+
 });
 
 //? webRTC
@@ -128,6 +135,9 @@ app.use('/courses/:id/lessons', lessons);
 
 const userRoutes = require('./routes/users');
 app.use(userRoutes);
+
+const chatRoutes = require('./routes/chat');
+app.use(chatRoutes);
 
 app.all('*', isLoggedIn, (req, res, next) => {
     res.sendStatus(404);

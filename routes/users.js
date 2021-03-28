@@ -14,7 +14,7 @@ router.route('/register')
 
 router.route('/login')
     .get(isLoggedOut, users.renderLoginForm)
-    .post(isLoggedOut, passport.authenticate('local', {
+    .post(passport.authenticate('local', {
         failureRedirect: '/login',
         failureFlash: { type: 'error', message: 'Usuario o contraseña incorrectos' }
     }), users.login);

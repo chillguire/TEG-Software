@@ -28,17 +28,49 @@
                         <h6 class="dropdown-header">
                             Mensajes
                         </h6>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
+                        <% if (message) {%>
+                        <a class="dropdown-item d-flex align-items-center" href="/chat">
                             <div class="dropdown-list-image mr-3">
                                 <img class="rounded-circle" src="http://placehold.it/200">
-                            </div>
+                            </div> 
                             <div>
-                                <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                    told me that people say this to all dogs, even if they aren't good...</div>
-                                <div class="small">Chicken the Dog · 2w</div>
+                                <div class="text-truncate"><%= `${message.content}` %></div>
+                                <% 
+                                function timeSince(date) {
+
+                                    var seconds = Math.floor((new Date() - date) / 1000);
+
+                                    var interval = seconds / 31536000;
+
+                                    if (interval > 1) {
+                                        return `Hace ${Math.floor(interval)} ${(Math.floor(interval) > 1) ? 'años' : 'año'}`;
+                                    }
+                                    interval = seconds / 2592000;
+                                    if (interval > 1) {
+                                        return `Hace ${Math.floor(interval)} ${(Math.floor(interval) > 1) ? 'meses' : 'mes'}`;
+                                    }
+                                    interval = seconds / 86400;
+                                    if (interval > 1) {
+                                        return `Hace ${Math.floor(interval)} ${(Math.floor(interval) > 1) ? 'días' : 'día'}`;
+                                    }
+                                    interval = seconds / 3600;
+                                    if (interval > 1) {
+                                        return `Hace ${Math.floor(interval)} ${(Math.floor(interval) > 1) ? 'horas' : 'hora'}`;
+                                    }
+                                    interval = seconds / 60;
+                                    if (interval > 1) {
+                                        return `Hace ${Math.floor(interval)} ${(Math.floor(interval) > 1) ? 'minutos' : 'minuto'}`;
+                                    }
+                                    return `Hace ${Math.floor(seconds)} ${(Math.floor(seconds) > 1) ? 'segundos' : 'segundo'}`;
+                                }
+                                %>
+                                <div class="small"><%= `${message.author} · ${timeSince(message.createdAt)}` %> </div>
                             </div>
                         </a>
-                        <a class="dropdown-item text-center small" href="#">Read More Messages</a>
+                        <a class="dropdown-item text-center small" href="/chat">Leer más mensajes</a>
+                        <% } else { %>
+                        <a class="dropdown-item text-center small" href="/chat">Ir al chat</a>
+                        <% } %>
                     </div>
                 </li>
                 <!-- Nav Item - Messages -->

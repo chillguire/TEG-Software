@@ -79,6 +79,10 @@ module.exports.renderLoginForm = (req, res) => {
 }
 
 module.exports.login = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return res.redirect('/courses');
+    }
+
     req.flash('success', '¡Bienvenido de nuevo! ');
     res.redirect('/courses');
 }

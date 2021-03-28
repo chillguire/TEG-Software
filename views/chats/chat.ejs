@@ -1,0 +1,50 @@
+<%- include ('../partials/head') -%>
+<%- include ('../partials/sidebar') -%>
+<%- include ('../partials/topbar') -%>
+
+            <div class="card">
+                <div class="row no-gutters">
+
+                    <div class="col-4 border-right border-dark">
+                        <div class="card-header">
+                            <h5 class="m-0">Usuarios</h5>
+                        </div>
+
+                        <div id="userList">
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-8">
+                        <div class="card-header">
+                            <h5 class="m-0">Mensajes</h5>
+                        </div>
+
+                        <div>
+                            <div class="card-body" id="chatPanel">
+                              
+                            </div>
+                            <form class="input-group card-footer" id="messageForm" autocomplete="off">
+                                <input type="text" class="form-control chat-btn" placeholder="Mensaje..." id="message" autocomplete="false">
+                                <div class="input-group-append">
+                                    <button class="btn btn-light" type="submit">
+                                        <i class="fab fa-telegram-plane fa-lg"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+
+<%- include ('../partials/footer') -%>
+<%- include ('../partials/modal') -%>
+<%- include ('../partials/scripts') -%>
+<script>
+    const username = "<%= `${currentUser.firstName} ${currentUser.lastName}` %>";
+</script>
+<script src="/socket.io/socket.io.min.js" defer></script>
+<script src="/js/chat.js" defer></script>
