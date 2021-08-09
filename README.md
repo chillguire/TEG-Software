@@ -14,6 +14,7 @@ It's made with MongoDB, Express, Node.js, Bootstrap, WebRTC, Socket.IO and lots 
 - Lessons CRUD.
 - Assigning teachers to courses.
 - Students enrollment to courses.
+- Email delivery.
 - Video conferencing (needs improvement).
 - Chat (needs improvement).
 - Further interesting functionalities as I keep learning!

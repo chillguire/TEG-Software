@@ -37,6 +37,15 @@ module.exports.isUUIDvalid = async function (req, res, next) {
     res.locals.uuid = uuid;
     next();
 }
+module.exports.doesUserExists = async function (req, res, next) {
+    let user;
+    if (!isValidObjectId(req.params.userID) || !(user = await User.findById(req.params.userID))) {
+        req.flash('error', 'El usuario no existe');
+        return res.redirect(`/courses`);
+    }
+    res.locals.user = user;
+    next();
+}
 
 // check if user is logged in
 module.exports.isLoggedIn = function (req, res, next) {
@@ -76,6 +85,13 @@ module.exports.belongsToCourse = function (req, res, next) {
         return next();
     }
     req.flash('warning', 'No puedes acceder a este curso');
+    return res.redirect('/courses');
+}
+module.exports.belongsToProfile = function (req, res, next) {
+    if ((req.user._id.equals(res.locals.user._id))) {
+        return next();
+    }
+    req.flash('warning', 'No estás autorizado para hacer esto');
     return res.redirect('/courses');
 }
 

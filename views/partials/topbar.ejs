@@ -84,12 +84,16 @@
                         <span class="mr-2 d-none d-lg-inline small">
                             <%= `${currentUser.firstName} ${currentUser.lastName}` %>
                         </span>
-                        <img class="img-profile rounded-circle" src="http://placehold.it/200">
+                        <% if (currentUser.avatar.filename !== 'default-avatar') {%>
+                            <img class="img-profile rounded-circle" src="https://res.cloudinary.com/dqezerprq/image/upload/c_fill,g_face,h_64,w_64/<%= currentUser.avatar.filename %>">
+                        <% } else { %>
+                            <img class="img-profile rounded-circle" src="<%= currentUser.avatar.url %>">
+                        <% } %>
                     </a>
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                         aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="/user/<%= `${currentUser._id}` %>">
                             <i class="fas fa-user-circle fa-sm fa-fw mr-2 text-secondary"></i>
                             Mi perfil
                         </a>

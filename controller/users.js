@@ -1,6 +1,30 @@
 const User = require('../models/user');
 const InvitedUser = require('../models/invitedUser');
 
+const path = require('path');
+
+const { cloudinary, storage } = require('../cloudinary');
+const multer = require('multer');
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 500000 },
+    fileFilter: function (req, file, callback) {
+        /**
+        * TODO: check with magic number if file really is an image. I think everything in multer happens before file is uploaled, so it would probably be a middleware after it gets saved, I'm not sure. Good luck Ricardo of the future.
+        */
+        const filetypes = /jpeg|jpg|png/;
+
+        const mimeType = filetypes.test(file.mimetype);
+        const extensionName = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+        if (mimeType && extensionName) {
+            return callback(null, true);
+        }
+        callback(null, false);
+        return callback(new Error('El archivo subido no es una imagen válida'));
+    }
+}).single('avatar');
+
 const { sendEmail } = require('../middleware/middleware');
 
 const { v4: uuidV4 } = require('uuid');
@@ -195,7 +219,7 @@ module.exports.inviteUsers = async (req, res) => {
         } else {
             req.flash('error', error.message);
         }
-        res.redirect(`/users/invite`);
+        res.redirect(`/user/invite`);
     }
 }
 
@@ -203,4 +227,49 @@ module.exports.logout = (req, res) => {
     req.logout();
     req.flash('success', 'Desconectado exitosamente');
     res.redirect('/login');
+}
+
+module.exports.renderSpecific = async (req, res) => {
+    const user = await res.locals.user;
+    // .populate({
+    //     path: 'lessons',
+    //     options: { sort: { createdAt: 'desc' } }
+    // })
+    // .populate({
+    //     path: 'instructor',
+    // })
+    // .populate({
+    //     path: 'students',
+    // })
+    // .execPopulate();
+    res.render('users/profile', { user: user });
+}
+
+module.exports.renderEditForm = async (req, res) => {
+    const user = await res.locals.user;
+    res.render('users/edit', { user: user });
+}
+
+module.exports.update = (req, res) => {
+    const user = res.locals.user;
+    upload(req, res, async function (error) {
+        if (error) {
+            if (error.code === 'LIMIT_FILE_SIZE') {
+                req.flash('error', 'Tú crees que el espacio es gratis chamo');
+            } else {
+                req.flash('error', error.message);
+            }
+            return res.redirect(`/user/${user._id}/edit`);
+        }
+        if (!req.file) {
+            req.flash('error', 'Error parsing the image, image cannot be empty');
+            return res.redirect(`/user/${user._id}/edit`);
+        }
+        if (user.avatar.filename !== 'default-avatar') {
+            await cloudinary.uploader.destroy(user.avatar.filename);
+        }
+        user.avatar = { url: req.file.path, filename: req.file.filename };
+        await user.save();
+        res.redirect(`/user/${user._id}`);
+    });
 }

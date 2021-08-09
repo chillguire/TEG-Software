@@ -35,6 +35,16 @@ const userSchema = new Schema({
     resetPasswordExpires: {
         type: Date,
     },
+    avatar: {
+        url: {
+            type: String,
+            default: 'https://iupac.org/wp-content/uploads/2018/05/default-avatar.png',
+        },
+        filename: {
+            type: String,
+            default: 'default-avatar',
+        },
+    },
 });
 
 const options = {

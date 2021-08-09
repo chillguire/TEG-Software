@@ -1,0 +1,27 @@
+<%- include ('../partials/head') -%>
+<%- include ('../partials/sidebar') -%>
+<%- include ('../partials/topbar') -%>
+
+<section class="text-center">
+    <div class="container d-flex align-items-center flex-column">
+        <div>
+        <% if (user.avatar.filename !== 'default-avatar') {%>
+            <img class="mb-2 rounded-circle" style="width: 22.5rem;height: 22.5rem;object-fit: cover;" src="https://res.cloudinary.com/dqezerprq/image/upload/c_fill,g_face,h_450,w_450/<%= user.avatar.filename %>" alt="profile pic" />
+        <% } else { %>
+            <img class="mb-2 rounded-circle" style="width: 22.5rem;height: 22.5rem;object-fit: cover;" src="<%= user.avatar.url %>" alt="profile pic" />
+        <% } %>
+            
+            <% if (currentUser._id.equals(user._id) ) { %>
+                <a href="/user/<%= user._id %>/edit" class="rounded-circle btn btn-warning align-bottom" style="margin-left: -25%;margin-top: -25%"><i class="fas fa-pen" aria-hidden="true"></i></a>
+            <% } %>
+        </div>
+        <h1 class="text-uppercase mb-0"><%= `${user.firstName} ${user.lastName}` %></h1>
+        <hr>
+        <p class="font-weight-light mb-0">
+        <%= `${(user.type == 'Admin') ? 'Administrador' : (user.type == 'Instructor') ? 'Profesor' : 'Estudiante'} — ${user.email}` %></p>
+    </div>
+</section>
+
+<%- include ('../partials/footer') -%>
+<%- include ('../partials/modal') -%>
+<%- include ('../partials/scripts') -%>

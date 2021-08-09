@@ -93,6 +93,7 @@ h6.text-primary{
 .topbar .nav-item .nav-link .img-profile {
     height: 2rem;
     width: 2rem;
+    object-fit: cover;
 }
 .topbar {
     height: 4.375rem;

@@ -1,6 +1,9 @@
 (function ($) {
   "use strict"; // Start of use strict
 
+  //boostrap file input
+  bsCustomFileInput.init();
+
   // Toggle the side navigation
   $("#sidebarToggleTop").on('click', function (e) {
     $("body").toggleClass("sidebar-toggled");
