@@ -7,14 +7,14 @@ module.exports = function (io) {
         socket.on('join-room', (roomID, userID) => {
 
             socket.join(roomID);
-            socket.to(roomID).broadcast.emit('user-connected', userID);
+            socket.to(roomID).emit('user-connected', userID);
 
             socket.on('message', (message) => {
                 io.to(roomID).emit('create-message', message);
             });
 
             socket.on('disconnect', () => {
-                socket.to(roomID).broadcast.emit('user-disconnected', userID);
+                socket.to(roomID).emit('user-disconnected', userID);
             });
         });
         //** videoconference

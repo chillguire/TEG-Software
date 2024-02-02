@@ -37,7 +37,7 @@ router.route('/user/invite')
     .get(isLoggedIn, isAdmin, users.renderInviteForm)
     .post(isLoggedIn, isAdmin, users.inviteUsers);
 
-router.get('/logout', isLoggedIn, users.logout);
+router.post('/logout', isLoggedIn, users.logout);
 
 router.route('/user/:userID')
     .get(isLoggedIn, doesUserExists, users.renderSpecific)

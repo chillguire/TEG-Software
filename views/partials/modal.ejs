@@ -13,7 +13,9 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-warning" type="button" data-dismiss="modal">Cancelar</button>
-                <a class="btn btn-primary" href="/logout">Cerrar sesión</a>
+                <form action="/logout" method="post">
+                    <button type="submit" name="logoutBtn" class="btn btn-primary">Cerrar sesión</button>
+                </form>
             </div>
         </div>
     </div>

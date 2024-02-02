@@ -1,17 +1,5 @@
 const socket = io('/');
-const myPeer = new Peer(undefined, {
-    path: '/peerjs',
-    host: '/',
-    port: '443',
-    debug: 3,
-    config: {
-        'iceServers': [{
-            'iceTransportPolicy': 'all',
-            'urls': 'stun:stun.l.google.com:19302',
-        }],
-        'sdpSemantics': 'unified-plan',
-    },
-});
+const myPeer = new Peer();
 
 let myVideoStream;
 const videoGrid = document.getElementById('video-grid');

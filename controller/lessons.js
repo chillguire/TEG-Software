@@ -30,7 +30,7 @@ module.exports.create = async (req, res, next) => {
         }),
         OGdescription: req.body.description,
         descriptionMD: removeMD(req.body.description),
-        sanitizedDescription: sanitizeHtml(marked(req.body.description)),
+        sanitizedDescription: sanitizeHtml(marked.parse(req.body.description)),
         course: course._id,
     }
     const lesson = new Lesson(newLesson);
@@ -67,7 +67,7 @@ module.exports.update = async (req, res) => {
         }),
         OGdescription: req.body.description,
         descriptionMD: removeMD(req.body.description),
-        sanitizedDescription: sanitizeHtml(marked(req.body.description)),
+        sanitizedDescription: sanitizeHtml(marked.parse(req.body.description)),
     }
 
     try {

@@ -203,6 +203,10 @@ const createSmtpTransport = async () => {
     return smtpTransport;
 };
 module.exports.sendEmail = async (emailOptions) => {
-    let emailTransporter = await createSmtpTransport();
-    await emailTransporter.sendMail(emailOptions);
+    try {
+        let emailTransporter = await createSmtpTransport();
+        await emailTransporter.sendMail(emailOptions);
+    } catch (error) {
+        console.log(error);
+    }
 };

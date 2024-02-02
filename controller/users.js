@@ -127,7 +127,7 @@ module.exports.forgotPassword = async (req, res) => {
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour from now
         await user.save();
 
-        sendEmail({
+        await sendEmail({
             to: user.email,
             from: `Sistema de Gestión Académica a Distancia ${process.env.MAIL_ACCOUNT}`,
             subject: `Solicitud de restablecimiento de contraseña`,
@@ -155,7 +155,7 @@ module.exports.resetPassword = async (req, res) => {
         user.resetPasswordExpires = undefined;
         await user.save();
 
-        sendEmail({
+        await sendEmail({
             to: user.email,
             from: `Sistema de Gestión Académica a Distancia ${process.env.MAIL_ACCOUNT}`,
             subject: `Contraseña cambiada`,
@@ -202,7 +202,7 @@ module.exports.inviteUsers = async (req, res) => {
         const invitedUser = new InvitedUser(newInvitedUser)
         await invitedUser.save();
 
-        sendEmail({
+        await sendEmail({
             to: invitedUser.email,
             from: `Sistema de Gestión Académica a Distancia ${process.env.MAIL_ACCOUNT}`,
             subject: `Invitado al sistema de gestión académica a distancia`,
@@ -224,9 +224,11 @@ module.exports.inviteUsers = async (req, res) => {
 }
 
 module.exports.logout = (req, res) => {
-    req.logout();
-    req.flash('success', 'Desconectado exitosamente');
-    res.redirect('/login');
+    req.logout(function (err) {
+        if (err) { return next(err); }
+        req.flash('success', 'Desconectado exitosamente');
+        res.redirect('/login');
+    });
 }
 
 module.exports.renderSpecific = async (req, res) => {
