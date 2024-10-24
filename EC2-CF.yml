@@ -49,6 +49,7 @@ Resources:
           touch /etc/yum.repos.d/mongodb-org-7.0.repo
           printf "[mongodb-org-7.0]\nname=MongoDB Repository\nbaseurl=https://repo.mongodb.org/yum/amazon/2023/mongodb-org/7.0/x86_64/\ngpgcheck=1\nenabled=1\ngpgkey=https://pgp.mongodb.com/server-7.0.asc\n" >> /etc/yum.repos.d/mongodb-org-7.0.repo
 
+          yum install -y mongodb-mongosh-shared-openssl3
           yum install -y mongodb-org
 
           systemctl start mongod
