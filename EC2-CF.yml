@@ -97,7 +97,11 @@ Resources:
           cd /var/lib/cloud/scripts/per-boot
           sudo touch start.sh
           chmod 755 start.sh
-          printf '#!/bin/bash\n\nsu - ec2-user -c "cd /home/ec2-user/TEG-Software && git pull && pm2 start server.js"\nsudo certbot renew\nsystemctl start nginx' > /var/lib/cloud/scripts/per-boot/start.sh
+
+          printf '#!/bin/bash\n\nsu - ec2-user -c "cd /home/ec2-user/TEG-Software && git pull && pm2 start server.js"\n' > /var/lib/cloud/scripts/per-boot/start.sh
+          printf 'CURRENT_IP=$(curl http://checkip.amazonaws.com)\n' >> /var/lib/cloud/scripts/per-boot/start.sh
+          printf 'printf "user nginx;\\nworker_processes auto;\\nerror_log /var/log/nginx/error.log notice;\\npid /run/nginx.pid;\\n\\ninclude /usr/share/nginx/modules/*.conf;\\n\\nevents {\\n\\tworker_connections 1024;\\n}\\n\\nhttp {\\n\\tsendfile\\t\\t\\ton;\\n\\ttcp_nopush\\t\\t\\ton;\\n\\tkeepalive_timeout\\t65;\\n\\ttypes_hash_max_size\\t4096;\\n\\n\\tinclude\\t\\t\\t/etc/nginx/mime.types;\\n\\tdefault_type\\tapplication/octet-stream;\\n\\n\\tinclude /etc/nginx/conf.d/*.conf;\\n\\n\\tserver {\\n\\t\\tlisten\\t\\t80;\\n\\t\\tlisten\\t\\t[::]:80;\\n\\t\\tserver_name\\t_;\\n\\t\\troot\\t\\t/usr/share/nginx/html;\\n\\n\\t\\tinclude /etc/nginx/default.d/*.conf;\\n\\n\\t\\tlocation / {\\n\\t\\t\\tproxy_pass http://127.0.0.1:3000;\\n\\t\\t}\\n\\n\\t\\terror_page 404 /404.html;\\n\\t\\tlocation = /404.html {\\n\\t\\t}\\n\\n\\t\\terror_page 500 502 503 504 /50x.html;\\n\\t\\tlocation = /50x.html {\\n\\t\\t}\\n\\t}\\n\\n\\tserver {\\n\\t\\tserver_name $CURRENT_IP.nip.io;\\n\\n\\t\\tlocation / {\\n\\t\\t\\tproxy_pass http://127.0.0.1:3000;\\n\\t\\t}\\n\\t}\\n}" > /etc/nginx/nginx.conf\n' >> /var/lib/cloud/scripts/per-boot/start.sh
+          printf 'systemctl start nginx\nsudo certbot --nginx -d $CURRENT_IP.nip.io --agree-tos --register-unsafely-without-email\npkill -f nginx & wait $!\nservice nginx restart' >> /var/lib/cloud/scripts/per-boot/start.sh
 
           # Error handling - ResourceSignal success
           echo 'todo fino'
